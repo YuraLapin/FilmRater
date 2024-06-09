@@ -1,0 +1,174 @@
+﻿* {
+    box-sizing: border-box;
+    font-family: tahoma, verdana, arial;
+    font-size: 15px; 
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.header {
+    text-align: center;
+    font-family: tahoma, verdana, arial;
+    font-size: 30px;
+    color: #f60;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.outer-container {
+    width: 1200px;
+    display: flex;
+    box-shadow: 0 0 0 2px white, 0.3em 0.3em 1em rgb(0 0 0 / 60%);
+}
+
+.filter-container {
+    display: block;
+    width: 20%;
+}
+
+.filter-header {
+    font-size: 22px;
+    color: #f60;
+    padding-left: 5%;
+}
+
+.filter-group {
+    display: block;
+    margin-top: 3%;
+}
+
+.textbox-and-text {
+    display: flex;
+    padding-left: 3%;
+    margin-top: 2%
+}
+
+.textbox {
+    font-size: 15px;
+    height: 70%;
+    margin-left: 1%;
+    padding-left: 1%;
+    width: 70%;
+    border-color: grey;
+    border-radius: 4px;
+}
+
+.genre-filter-checkbox {
+    display: flex;
+    margin: 1%;
+}
+
+.button {
+    width: 50%;
+    height: 30px;
+    border-radius: 5px;
+    border-color: grey;
+    margin-left: 5%; 
+    margin-top: 5%;
+    margin-bottom: 5%;  
+}
+
+.library-container {
+    display: block;
+    width: 70%;
+}
+
+.film-table {
+   width: 100%;
+}
+
+    .film-table, tr {
+        border-bottom: 1px solid grey;
+        border-collapse: collapse;
+    }
+
+    .film-table, td {
+        align-self: end;
+    }
+
+.film-name-cell {
+    width: 35%; 
+}
+
+.film-score-cell {
+    text-align: center;
+    width: 7%;
+}
+
+.film-genre-cell {
+    text-align: start;
+    vertical-align: top;
+    width: 15%;
+}
+
+.film-director-cell {
+    text-align: start;
+    vertical-align: top;
+    width: 20%;
+}
+
+.film-country-cell {
+    text-align: start;
+    vertical-align: top;
+    width: 13%;
+}
+
+.film-user-score-cell {
+    text-align: center;
+    width: 10%;
+}
+
+.film-name {
+    color: #005;
+    font-size: 20px;
+    margin: 1%;
+}
+
+.film-score {
+    color: #f60;
+    font-size: 20px;
+}
+
+.film-info {
+    margin: 1%;
+    color: #888;
+    font-size: 12px;
+}
+
+.film-info-list {
+    padding: 1%;
+}
+
+.empty-search-result-message {
+    text-align: center;
+    font-size: 25px;
+    margin-top: 5%;
+}
+
+.user-container {
+    display: block;
+    width: 10%;
+}
+
+.basic-text {
+    margin-left: 5%;
+    margin-top: -1%;
+    margin-bottom: -1%;
+}
+
+.user-name {
+    color: #005;
+    font-size: 18px;
+    margin-left: 5%;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.selected-star {
+    color: orange;
+}

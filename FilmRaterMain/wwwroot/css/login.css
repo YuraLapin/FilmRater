@@ -1,0 +1,63 @@
+* {
+    box-sizing: border-box;
+    font-family: tahoma, verdana, arial;
+    font-size: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.main-container {
+    width: 400px;
+    margin-top: 10%;
+    box-shadow: 0 0 0 2px white, 0.3em 0.3em 1em rgb(0 0 0 / 60%);
+}
+
+.log-in-register-form {
+    display: block;
+    align-content: center;
+    padding-bottom: 3%;
+}
+
+.error-message {
+    width: 80%;
+    text-align: center;
+    word-wrap: break-word;
+    margin-top: 3%;
+    margin-left: 10%;
+    padding-left: 1%;
+    background: #ff7171;
+}
+
+.textbox {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 3%;
+    height: 40px;
+    font-size: 20px;
+    padding-left: 1%;
+    border-color: grey;
+    border-radius: 4px;
+}
+
+.button {
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 3%;
+    height: 40px;
+    border-radius: 5px;
+    border-color: grey;
+}
+
+.switch-button {
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 3%;
+    height: 60px;
+    border-radius: 5px;
+    border-color: grey;
+}

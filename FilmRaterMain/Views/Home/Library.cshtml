@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+
+<html lang="ru">
+
+    <head>
+
+        <meta charset="utf-8" />
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/vue@3.4.21/dist/vue.global.js"></script>
+
+        <link rel="stylesheet" href="~/css/library.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    </head>
+
+    <body>
+
+        <div id="library">
+
+            <template v-if="userName != ''">
+
+                <p class="header">Фильмотека</p>
+
+                <div class="outer-container">
+
+                    <div class="filter-container">
+
+                        <div class="filter-group">
+
+                            <p class="filter-header">Фильтр рейтинга</p>
+
+                            <div class="textbox-and-text">
+
+                                <p>От: </p>
+                                <input class="textbox" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="minScore" />
+
+                            </div>
+
+                            <div class="textbox-and-text">
+
+                                <p>До: </p>
+                                <input class="textbox" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="maxScore" />
+
+                            </div>
+
+                        </div>
+
+                        <div class="filter-group">
+
+                            <p class="filter-header">Фильтр года</p>
+
+                            <div class="textbox-and-text">
+
+                                <p>От: </p>
+                                <input class="textbox" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="minYear" />
+
+                            </div>
+
+                            <div class="textbox-and-text">
+
+                                <p>До: </p>
+                                <input class="textbox" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="maxYear" />
+
+                            </div>
+
+                        </div>
+
+                        <div class="filter-group">
+
+                            <p class="filter-header">Фильтр жанров</p>
+
+                            <div class="genre-filter-checkbox" v-for="genre in genres">
+
+                                <input type="checkbox" v-on:change="checkGenre($event, genre)" />
+                                <p>{{ genre }}</p>
+
+                            </div>
+
+                        </div>
+
+                        <button class="button" v-on:click="updateLibrary()">Обновить</button>
+
+
+                    </div>
+
+                    <div class="library-container">
+
+                        <div class="film-container" v-for="film in library" v-if="library.length > 0">
+
+                            <table class="film-table">
+
+                                <tr>
+
+                                    <td class="film-name-cell">
+                                        <p class="film-name">{{ film.name }}</p>
+                                        <p class="film-info">{{ film.year }} г. | {{ film.duration }} мин.</p>
+                                    </td>
+
+
+                                    <td class="film-score-cell">
+                                        <p class="film-score">{{ film.rating }}</p>
+                                    </td>
+
+                                    <td class="film-genre-cell">
+                                        <div class="film-info-list">
+
+                                            <p class="film-info" v-for="genre in film.genres">{{ genre }}</p>
+
+                                        </div>
+                                    </td>
+
+                                    <td class="film-director-cell">
+                                        <div class="film-info-list">
+
+                                            <p class="film-info" v-for="director in film.directors">{{ director }}</p>
+
+                                        </div>
+                                    </td>
+
+                                    <td class="film-country-cell">
+                                        <div class="film-info-list">
+
+                                            <p class="film-info" v-for="country in film.countries">{{ country }}</p>
+
+                                        </div>
+                                    </td>
+
+                                    <td class="film-user-score-cell">
+                                        <div>
+
+                                            <span class="fa fa-star" v-bind:class="{ 'selected-star': film.visualRating >= 1 }" v-on:mouseover="film.visualRating = 1" v-on:mouseleave="film.visualRating = film.currentUserRating" v-on:click="film.currentUserRating = 1; updateUserScore(film.id, 1)"></span>
+                                            <span class="fa fa-star" v-bind:class="{ 'selected-star': film.visualRating >= 2 }" v-on:mouseover="film.visualRating = 2" v-on:mouseleave="film.visualRating = film.currentUserRating" v-on:click="film.currentUserRating = 2; updateUserScore(film.id, 2)"></span>
+                                            <span class="fa fa-star" v-bind:class="{ 'selected-star': film.visualRating >= 3 }" v-on:mouseover="film.visualRating = 3" v-on:mouseleave="film.visualRating = film.currentUserRating" v-on:click="film.currentUserRating = 3; updateUserScore(film.id, 3)"></span>
+                                            <span class="fa fa-star" v-bind:class="{ 'selected-star': film.visualRating >= 4 }" v-on:mouseover="film.visualRating = 4" v-on:mouseleave="film.visualRating = film.currentUserRating" v-on:click="film.currentUserRating = 4; updateUserScore(film.id, 4)"></span>
+                                            <span class="fa fa-star" v-bind:class="{ 'selected-star': film.visualRating >= 5 }" v-on:mouseover="film.visualRating = 5" v-on:mouseleave="film.visualRating = film.currentUserRating" v-on:click="film.currentUserRating = 5; updateUserScore(film.id, 5)"></span>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                        <p class="empty-search-result-message" v-if="library.length == 0">По вашему запросу ничего не найдено</p>
+
+                    </div>
+
+                    <div class="user-container">
+
+                        <p class="basic-text">Вы зашли под именем:</p>
+                        <p><u class="user-name">{{ userName }}</u></p>
+                        <button class="button" v-on:click="goHome()">Выход</button>
+
+                    </div>
+
+                </div>
+
+            </template>
+
+        </div>
+
+        <form method="post" id="throw-to-login-form" style="display:none" action="~/Home/Login">
+            <input/>
+        </form>
+
+        <script src="~/js/library-script.js"></script>
+
+    </body>
+
+</html>
