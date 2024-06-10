@@ -172,3 +172,18 @@ body {
 .selected-star {
     color: orange;
 }
+
+.paging-buttons-container {
+
+}
+
+.paging-button {
+    width: 35px;
+    height: 20px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.inactive-paging-button {
+    color: #f60;
+}

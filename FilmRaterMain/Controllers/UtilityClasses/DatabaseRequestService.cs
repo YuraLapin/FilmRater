@@ -1,4 +1,6 @@
-﻿using System.Data.SqlTypes;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Data.SqlTypes;
+using System.Text;
 
 namespace FilmRaterMain.Controllers.UtilityClasses
 {
@@ -31,6 +33,8 @@ namespace FilmRaterMain.Controllers.UtilityClasses
         {
             config = new DbConfiguration();
         }
+
+        public const int pageSize = 20;
 
         public async Task<string> GetStoredHash(string login)
         {
@@ -169,9 +173,16 @@ namespace FilmRaterMain.Controllers.UtilityClasses
             return genres;
         }
 
-        public async Task<List<CompleteFilmData>> GetLibrary(string userName, List<string>? genres, float? minScore, float? maxScore, int? minYear, int? maxYear)
+        public async Task<List<CompleteFilmData>> GetLibrary(string userName, List<string> genres, float minScore, float maxScore, int minYear, int maxYear, int page)
         {
             var library = new List<CompleteFilmData>();
+
+            var genreFilter = new StringBuilder();
+            foreach (var genre in genres)
+            {
+                genreFilter = genreFilter.AppendLine(genre);
+                genreFilter = genreFilter.AppendLine(",");
+            }
 
             MySql.Data.MySqlClient.MySqlConnection conn;
 
@@ -180,31 +191,41 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                 await conn.OpenAsync();
 
                 var cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT film_id, film_name, film_year, film_duration FROM film;";
-
-                var filmList = new List<FilmData>();
+                cmd.CommandText = $"SELECT film.film_id, film_name, film_year, film_duration, \r\nGROUP_CONCAT(DISTINCT director.director_name SEPARATOR ', ') AS directors,\r\nGROUP_CONCAT(DISTINCT country.country_name SEPARATOR ', ') AS countries,\r\nAVG(user_score.score) AS rating\r\n\tFROM film\r\n\t\tJOIN film_genre ON film_genre.film_id = film.film_id\r\n\t\tJOIN genre ON genre.genre_id = film_genre.genre_id\r\n        JOIN film_director ON film_director.film_id = film.film_id\r\n        JOIN director ON director.director_id = film_director.director_id\r\n        JOIN film_country ON film_country.film_id = film.film_id\r\n        JOIN country ON country.country_id = film_country.country_id\r\n        LEFT JOIN user_score ON user_score.film_id = film.film_id\r\n\tWHERE FIND_IN_SET(genre.genre_name, @genre_filter) OR @genre_filter = \"\"\r\n\tGROUP BY film.film_id\r\n\tHAVING film.film_year >= @min_year AND film.film_year <= @max_year\r\n    AND (AVG(user_score.score) >= @min_rating AND AVG(user_score.score) <= @max_rating) OR COUNT(user_score.score) = 0\r\n    LIMIT { (page - 1) * pageSize }, { pageSize };";
+                cmd.Parameters.AddWithValue("@min_rating", minScore);
+                cmd.Parameters.AddWithValue("@max_rating", maxScore);
+                cmd.Parameters.AddWithValue("@min_year", minYear);
+                cmd.Parameters.AddWithValue("@max_year", maxYear);
+                cmd.Parameters.AddWithValue("@genre_filter", genreFilter.ToString());
 
                 using (var reader = await cmd.ExecuteReaderAsync())
                 {
                     while (await reader.ReadAsync())
                     {
-                        filmList.Add(new FilmData()
+                        var newFilm = new CompleteFilmData()
                         {
                             Id = reader.GetString(0),
                             Name = reader.GetString(1),
                             Year = reader.GetInt32(2),
                             Duration = reader.GetInt32(3),
-                        });
+                            Directors = reader.GetString(4).Split(", ").ToList(),
+                            Countries = reader.GetString(5).Split(", ").ToList(),
+                        };
+                        try
+                        {
+                            newFilm.Rating = reader.GetInt32(6);
+                        }
+                        catch (SqlNullValueException)
+                        {
+                            newFilm.Rating = 0;
+                        }
+                        library.Add(newFilm);
                     }
                 }
 
-                int i = 0;
-                foreach (var film in filmList)
+                foreach (var film in library)
                 {
                     var currentGenres = new List<string>();
-                    var currentDirectors = new List<string>();
-                    var currentCountries = new List<string>();
-                    float rating = 0;
                     int currentUserRating = 0;
 
                     cmd.CommandText = "SELECT genre.genre_name FROM film_genre JOIN genre ON genre.genre_id = film_genre.genre_id WHERE film_genre.film_id = @film_id;";
@@ -218,40 +239,6 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                         }
                     }
 
-                    cmd.CommandText = "SELECT director.director_name FROM film_director JOIN director ON director.director_id = film_director.director_id WHERE film_director.film_id = @film_id;";
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            currentDirectors.Add(reader.GetString(0));
-                        }
-                    }
-
-                    cmd.CommandText = "SELECT country.country_name FROM film_country JOIN country ON country.country_id = film_country.country_id WHERE film_country.film_id = @film_id;";
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            currentCountries.Add(reader.GetString(0));
-                        }
-                    }
-
-                    cmd.CommandText = "SELECT AVG(user_score.score) FROM user_score WHERE user_score.film_id = @film_id;";
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        try
-                        {
-                            while (await reader.ReadAsync())
-                            {
-                                rating = MathF.Round(reader.GetFloat(0), 2);
-                            }
-                        }
-                        catch (SqlNullValueException)
-                        {
-                            rating = 0;
-                        }
-                    }
-
                     cmd.CommandText = "SELECT user_score.score FROM user_score WHERE user_score.film_id = @film_id AND user_score.user_name = @user_name;";
                     cmd.Parameters.AddWithValue("@user_name", userName);
                     using (var reader = await cmd.ExecuteReaderAsync())
@@ -262,66 +249,11 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                         }
                     }
 
-                    var completeFilm = new CompleteFilmData()
-                    {
-                        Id = film.Id,
-                        Name = film.Name,
-                        Year = film.Year,
-                        Duration = film.Duration,
-                        Genres = currentGenres,
-                        Directors = currentDirectors,
-                        Countries = currentCountries,
-                        Rating = rating,
-                        CurrentUserRating = currentUserRating,
-                    };
-
-                    library.Add(completeFilm);
-
-                    ++i;
+                    film.Genres = currentGenres;
+                    film.CurrentUserRating = currentUserRating;
                 }
 
                 await conn.CloseAsync();
-            }
-
-            if (genres != null && genres.Count() > 0)
-            {
-                foreach (var film in library.ToList())
-                {
-                    bool deleting = true;
-                    foreach (var genre in genres)
-                    {
-                        if (film.Genres.Contains(genre))
-                        {
-                            deleting = false;
-                        }
-                    }
-                    if (deleting)
-                    {
-                        library.Remove(film);
-                    }
-                }
-            }
-
-            if (minScore != null && maxScore != null)
-            {
-                foreach (var film in library.ToList())
-                {
-                    if (film.Rating > maxScore || film.Rating < minScore)
-                    {
-                        library.Remove(film);
-                    }
-                }
-            }
-
-            if (minYear != null && maxYear != null)
-            {
-                foreach (var film in library.ToList())
-                {
-                    if (film.Year > maxYear || film.Year < minYear)
-                    {
-                        library.Remove(film);
-                    }
-                }
             }
 
             return library;
@@ -391,6 +323,44 @@ namespace FilmRaterMain.Controllers.UtilityClasses
             }
 
             return true;
+        }
+
+        public async Task<int> GetTotalPages(string userName, List<string> genres, float minScore, float maxScore, int minYear, int maxYear)
+        {
+            MySql.Data.MySqlClient.MySqlConnection conn;
+
+            int pages = 1;
+
+            var genreFilter = new StringBuilder();
+            foreach (var genre in genres)
+            {
+                genreFilter = genreFilter.AppendLine(genre);
+                genreFilter = genreFilter.AppendLine(",");
+            }
+
+            using (conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            {
+                await conn.OpenAsync();
+
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT COUNT(*) FROM\r\n(\r\nSELECT film.film_id, film.film_name, film.film_year, film.film_duration, \r\nGROUP_CONCAT(DISTINCT director.director_name SEPARATOR ', ') AS directors,\r\nGROUP_CONCAT(DISTINCT country.country_name SEPARATOR ', ') AS countries,\r\nAVG(user_score.score) AS rating\r\n\tFROM film\r\n\t\tJOIN film_genre ON film_genre.film_id = film.film_id\r\n\t\tJOIN genre ON genre.genre_id = film_genre.genre_id\r\n        JOIN film_director ON film_director.film_id = film.film_id\r\n        JOIN director ON director.director_id = film_director.director_id\r\n        JOIN film_country ON film_country.film_id = film.film_id\r\n        JOIN country ON country.country_id = film_country.country_id\r\n        LEFT JOIN user_score ON user_score.film_id = film.film_id\r\n\tWHERE FIND_IN_SET(genre.genre_name, @genre_filter) OR @genre_filter = \"\"\r\n\tGROUP BY film.film_id\r\n\tHAVING film.film_year >= @min_year AND film.film_year <= @max_year\r\n    AND (AVG(user_score.score) >= @min_rating AND AVG(user_score.score) <= @max_rating) OR COUNT(user_score.score) = 0\r\n) AS a;";
+                cmd.Parameters.AddWithValue("@min_rating", minScore);
+                cmd.Parameters.AddWithValue("@max_rating", maxScore);
+                cmd.Parameters.AddWithValue("@min_year", minYear);
+                cmd.Parameters.AddWithValue("@max_year", maxYear);
+                cmd.Parameters.AddWithValue("@genre_filter", genreFilter.ToString());
+
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        pages = (int)MathF.Ceiling((float)reader.GetInt32(0) / (float)pageSize);
+                    }
+                }                
+
+            }
+
+            return pages;
         }
     }
 }

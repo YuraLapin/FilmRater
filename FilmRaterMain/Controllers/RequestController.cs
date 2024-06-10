@@ -14,11 +14,12 @@ namespace FilmRaterMain.Controllers
     public class UserNameAndFilters
     {
         public string UserName { get; set; }
-        public List<string>? Genres { get; set; }
-        public float? MinScore { get; set; }
-        public float? MaxScore { get; set; }
-        public int? MinYear { get; set; }
-        public int? MaxYear { get; set; }
+        public List<string> Genres { get; set; }
+        public float MinScore { get; set; }
+        public float MaxScore { get; set; }
+        public int MinYear { get; set; }
+        public int MaxYear { get; set; }
+        public int Page { get; set; }
     }
 
     public class MinMaxYears
@@ -83,7 +84,7 @@ namespace FilmRaterMain.Controllers
         [HttpPost("GetLibrary")]
         public async Task<IActionResult> GetLibrary([FromBody] UserNameAndFilters userNameAndFilters)
         {
-            var library = await requestClass.GetLibrary(userNameAndFilters.UserName, userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear);
+            var library = await requestClass.GetLibrary(userNameAndFilters.UserName, userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear, userNameAndFilters.Page);
 
             return Ok(library);
         }
@@ -100,6 +101,12 @@ namespace FilmRaterMain.Controllers
         public async Task<IActionResult> UpdateUserScore([FromBody] FilmScoreUpdate filmScoreUpdate)
         {
             return Ok(await requestClass.UpdateUserScore(filmScoreUpdate.FilmId, filmScoreUpdate.UserName, filmScoreUpdate.UserScore));
+        }
+
+        [HttpPost("GetTotalPages")]
+        public async Task<IActionResult> GetTotalPages([FromBody] UserNameAndFilters userNameAndFilters)
+        {
+            return Ok(await requestClass.GetTotalPages(userNameAndFilters.UserName, userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear));
         }
     }
 }

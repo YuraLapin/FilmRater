@@ -11,13 +11,15 @@ const Library = {
             minYearDefault: "",
             maxYearDefault: "",
             genres: [],
+            currentPage: 1,
+            totalPages: "",
         }
     },
     methods: {
         goHome() {
             $("#throw-to-login-form").submit()
         },
-        async updateLibrary() {
+        async updateLibrary(page) {
             if (vm.minScore == "") {
                 vm.minScore = 0
             }
@@ -42,10 +44,12 @@ const Library = {
                     "maxScore": vm.maxScore,
                     "minYear": vm.minYear,
                     "maxYear": vm.maxYear,
+                    "page": page,
                 }),
                 success: function (result) {
                     vm.library = result
                     vm.library.forEach((film) => film.visualRating = film.currentUserRating)
+                    vm.currentPage = page
                 }
             })
         },
@@ -74,7 +78,42 @@ const Library = {
             if (!(Number(e.data) >= 0 && Number(e.data) <= 9)) {
                 e.preventDefault();
             }
-        }
+        },
+        async getTotalPages() {
+            if (vm.minScore == "") {
+                vm.minScore = 0
+            }
+            if (vm.maxScore == "") {
+                vm.maxScore = 5
+            }
+            if (vm.minYear == "") {
+                vm.minYear = vm.minYearDefault
+            }
+            if (vm.maxYear == "") {
+                vm.maxYear = vm.maxYearDefault
+            }
+            await $.ajax({
+                url: "api/requests/GetTotalPages",
+                method: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "userName": vm.userName,
+                    "genres": vm.genreFilter,
+                    "minScore": vm.minScore,
+                    "maxScore": vm.maxScore,
+                    "minYear": vm.minYear,
+                    "maxYear": vm.maxYear,
+                    "page": 1,
+                }),
+                success: function (result) {
+                    vm.totalPages = result
+                }
+            })
+        },
+        createRange(start, stop, step) {
+            return Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step)
+        },
     },    
 }
 
@@ -108,6 +147,7 @@ window.onload = async function() {
                 vm.genres = result
             }
         })
-        vm.updateLibrary()
+        vm.updateLibrary(1)
+        vm.getTotalPages()
     }
 }
