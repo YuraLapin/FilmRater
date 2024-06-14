@@ -1,7 +1,7 @@
 const Library = {
     data() {
         return {
-            userName: localStorage.getItem("userName"),
+            userName: passedUserName,
             library: [],
             genreFilter: [],
             minScore: "",
@@ -13,11 +13,23 @@ const Library = {
             genres: [],
             currentPage: 1,
             totalPages: "",
+            loading: 0,
         }
     },
     methods: {
-        goHome() {
+        logOut() {
+            vm.userName = ""
+            vm.updateLibrary(vm.currentPage)
+        },
+        goLogin() {
+            $("#input-login-camefrom").val("Library")
+            $("#input-login-filmid").val(0)
             $("#throw-to-login-form").submit()
+        },
+        goToMoreFilmInfo(filmId) {
+            $("#hidden-form-input-user-name").val(vm.userName)
+            $("#hidden-form-input-film-id").val(filmId)
+            $("#throw-to-more-info").submit()
         },
         async updateLibrary(page) {
             if (vm.minScore == "") {
@@ -32,6 +44,8 @@ const Library = {
             if (vm.maxYear == "") {
                 vm.maxYear = vm.maxYearDefault
             }
+            vm.library = []
+            ++vm.loading
             await $.ajax({
                 url: "api/requests/GetLibrary",
                 method: "POST",
@@ -48,9 +62,14 @@ const Library = {
                 }),
                 success: function (result) {
                     vm.library = result
-                    vm.library.forEach((film) => film.visualRating = film.currentUserRating)
+                    vm.library.forEach((film) => {
+                        film.visualRating = film.currentUserRating
+                        film.coverUrl = "../images/covers/" + film.id + "_small.webp"
+                    })
                     vm.currentPage = page
                 }
+            }).always(function () {
+                --vm.loading
             })
         },
         async updateUserScore(filmId, userScore) {
@@ -121,33 +140,30 @@ const app = Vue.createApp(Library)
 
 var vm = app.mount('#library')
 
-window.onload = async function() {
-    if (localStorage.getItem("userName") == '') {
-        $("#throw-to-login-form").submit()
-    }
-    else {
-        await $.ajax({
-            url: "api/requests/GetMinMaxYears",
-            method: "GET",
-            dataType: "json",
-            contentType: "application/json",
-            success: function (result) {
-                vm.minYear = result.minYear
-                vm.minYearDefault = result.minYear
-                vm.maxYear = result.maxYear
-                vm.maxYearDefault = result.maxYear
-            }
-        })
-        await $.ajax({
-            url: "api/requests/GetGenres",
-            method: "GET",
-            dataType: "json",
-            contentType: "application/json",
-            success: function (result) {
-                vm.genres = result
-            }
-        })
-        vm.updateLibrary(1)
-        vm.getTotalPages()
-    }
+window.onload = async function () {
+    ++vm.loading
+    await $.ajax({
+        url: "api/requests/GetMinMaxYears",
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        success: function (result) {
+            vm.minYear = result.minYear
+            vm.minYearDefault = result.minYear
+            vm.maxYear = result.maxYear
+            vm.maxYearDefault = result.maxYear
+        }
+    })
+    await $.ajax({
+        url: "api/requests/GetGenres",
+        method: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        success: function (result) {
+            vm.genres = result
+        }
+    })
+    await vm.updateLibrary(1)
+    await vm.getTotalPages()
+    --vm.loading
 }

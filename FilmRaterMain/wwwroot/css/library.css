@@ -1,7 +1,7 @@
 ﻿* {
     box-sizing: border-box;
-    font-family: tahoma, verdana, arial;
-    font-size: 15px; 
+    font-family: Noto Sans, sans-serif;
+    font-size: 16px;
     margin: 0;
     padding: 0;
 }
@@ -91,13 +91,19 @@ body {
         align-self: end;
     }
 
-.film-name-cell {
-    width: 35%; 
+.film-cover-cell {
+    vertical-align: central;
+    width: 10%;
 }
 
-.film-score-cell {
-    text-align: center;
-    width: 7%;
+    .film-cover:hover {
+        cursor: pointer;
+    }
+
+.film-name-cell {
+    text-align: start;
+    vertical-align: top;
+    width: 30%;
 }
 
 .film-genre-cell {
@@ -129,9 +135,18 @@ body {
     margin: 1%;
 }
 
+    .film-name:hover {
+        cursor: pointer;
+    }
+
+.film-cover {
+    margin: 1%;
+}
+
 .film-score {
     color: #f60;
     font-size: 20px;
+    margin: 1%;
 }
 
 .film-info {
@@ -173,10 +188,6 @@ body {
     color: orange;
 }
 
-.paging-buttons-container {
-
-}
-
 .paging-button {
     width: 35px;
     height: 20px;
@@ -186,4 +197,24 @@ body {
 
 .inactive-paging-button {
     color: #f60;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+    margin: 5% 0 5% 380px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

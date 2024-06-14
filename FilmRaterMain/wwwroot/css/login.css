@@ -1,7 +1,7 @@
 * {
     box-sizing: border-box;
-    font-family: tahoma, verdana, arial;
-    font-size: 20px;
+    font-family: Noto Sans, sans-serif;
+    font-size: 16px;
     margin: 0;
     padding: 0;
 }
@@ -31,6 +31,7 @@ body {
     margin-left: 10%;
     padding-left: 1%;
     background: #ff7171;
+    padding: 1%;
 }
 
 .textbox {

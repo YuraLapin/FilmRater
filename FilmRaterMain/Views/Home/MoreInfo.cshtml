@@ -1,0 +1,221 @@
+﻿@model MoreInfoModel
+
+<!DOCTYPE html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue@3.4.21/dist/vue.global.js"></script>
+
+    <link rel="stylesheet" href="~/css/moreinfo.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+</head>
+
+<body>
+
+    <div id="film-info" class="outer-outer-container">
+
+        <div class="back-button-container">
+            <button class="back-button" v-on:click="goToLibrary()">&lt</button>
+        </div>
+
+        <div class="outer-container">
+
+            <div v-show="loading < 1">
+
+                <div class="info-and-cover">
+
+                    <div class="cover-container">
+
+                        <img cclass="cover" v-bind:src="filmData.coverUrl"></img>
+
+                    </div>
+
+                    <div class="film-info-container">
+
+                        <span class="film-name-blue" v-on:click="goToLibrary()">Фильмотека / </span>
+                        <span class="film-name">{{ filmData.name }}</span>
+
+                        <div>
+
+                            <table class="film-table">
+
+                                <tr>
+                                    <td class="header-cell">
+                                        <p class="table-header">Год производства</p>
+                                    </td>
+                                    <td class="info-cell">
+                                        <p class="table-info">{{ filmData.year }}</p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="header-cell">
+                                        <p class="table-header">Страна</p>
+                                    </td>
+                                    <td class="info-cell">
+                                        <p class="table-info">
+                                            <span v-for="country in filmData.countries">{{ country }}&nbsp</span>
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="header-cell">
+                                        <p class="table-header">Жанр</p>
+                                    </td>
+                                    <td class="info-cell">
+                                        <p class="table-info">
+                                            <span v-for="genre in filmData.genres">{{ genre }}&nbsp</span>
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="header-cell">
+                                        <p class="table-header">Слоган</p>
+                                    </td>
+                                    <td class="info-cell">
+                                        <p class="table-info">{{ filmData.slogan }}</p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="header-cell">
+                                        <p class="table-header">Режиссер</p>
+                                    </td>
+                                    <td class="info-cell">
+                                        <p class="table-info">
+                                            <span v-for="director in filmData.directors">{{ director }}&nbsp</span>
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="header-cell">
+                                        <p class="table-header">Время</p>
+                                    </td>
+                                    <td class="info-cell">
+                                        <p class="table-info">{{ filmData.duration }}</p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="header-cell">
+                                        <p class="table-header">Оценка зрителей</p>
+                                    </td>
+                                    <td class="info-cell">
+                                        <p class="rating">{{ filmData.rating }}</p>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="film-synopsis-container" align="justify">
+
+                    <p class="synopsis">{{ filmData.synopsis }}</p>
+
+                </div>
+
+                <div v-if="userName != ''">
+
+
+                    <div class="film-rating-container">
+
+                        <p><b class="rating-header">Ваша оценка</b></p>
+
+                        <span class="fa fa-star" v-bind:class="{ 'selected-star': filmData.visualRating >= 1 }" v-on:mouseover="filmData.visualRating = 1" v-on:mouseleave="filmData.visualRating = filmData.currentUserRating" v-on:click="filmData.currentUserRating = 1; updateUserScore(1)"></span>
+                        <span class="fa fa-star" v-bind:class="{ 'selected-star': filmData.visualRating >= 2 }" v-on:mouseover="filmData.visualRating = 2" v-on:mouseleave="filmData.visualRating = filmData.currentUserRating" v-on:click="filmData.currentUserRating = 2; updateUserScore(2)"></span>
+                        <span class="fa fa-star" v-bind:class="{ 'selected-star': filmData.visualRating >= 3 }" v-on:mouseover="filmData.visualRating = 3" v-on:mouseleave="filmData.visualRating = filmData.currentUserRating" v-on:click="filmData.currentUserRating = 3; updateUserScore(3)"></span>
+                        <span class="fa fa-star" v-bind:class="{ 'selected-star': filmData.visualRating >= 4 }" v-on:mouseover="filmData.visualRating = 4" v-on:mouseleave="filmData.visualRating = filmData.currentUserRating" v-on:click="filmData.currentUserRating = 4; updateUserScore(4)"></span>
+                        <span class="fa fa-star" v-bind:class="{ 'selected-star': filmData.visualRating >= 5 }" v-on:mouseover="filmData.visualRating = 5" v-on:mouseleave="filmData.visualRating = filmData.currentUserRating" v-on:click="filmData.currentUserRating = 5; updateUserScore(5)"></span>
+                    
+                    </div>
+
+                </div>
+
+                <div class="comment-list-container">
+
+                    <div class="comment-write-container" v-if="userName != ''">
+
+                        <p>
+                            <span class="comment-container-header">Вы авторизованы под именем:&ensp;</span>
+                            <span class="my-comment-user-name">{{ userName }}</span>
+                        </p>
+
+                        <textarea class="comment-textarea" id="comment-textarea" maxlength="510"></textarea>
+                        <button class="comment-send-button" v-on:click="sendComment()">Отправить</button>
+
+                    </div>
+
+                    <p class="comment-container-header" v-if="userName == ''">Войдите, чтобы оставить комментарий или поставить оценку</p>
+
+                    <div class="comment-container" v-for="comment in comments">
+
+                        <p class="comment-user-name" v-bind:class="{ 'my-comment-user-name': comment.userName == userName }"><u>{{ comment.userName }}</u></p>
+                        <div class="comment-rating-container" v-if="comment.userScore != 0">
+
+                            <span class="fa fa-star" v-bind:class="{ 'selected-star': comment.userScore >= 1 }"></span>
+                            <span class="fa fa-star" v-bind:class="{ 'selected-star': comment.userScore >= 2 }"></span>
+                            <span class="fa fa-star" v-bind:class="{ 'selected-star': comment.userScore >= 3 }"></span>
+                            <span class="fa fa-star" v-bind:class="{ 'selected-star': comment.userScore >= 4 }"></span>
+                            <span class="fa fa-star" v-bind:class="{ 'selected-star': comment.userScore >= 5 }"></span>
+
+                        </div>
+                        <p class="comment">{{ comment.text }}</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="loader" v-show="loading > 0"></div>
+
+        </div>
+
+        <div class="user-container" v-if="userName != ''">
+
+            <p class="basic-text">Вы зашли под именем:</p>
+            <p><u class="user-name">{{ userName }}</u></p>
+            <button class="button" v-on:click="logOut()">Выход</button>
+
+        </div>
+
+        <div class="user-container" v-if="userName == ''">
+
+            <p class="basic-text">Вы не авторизованы</p>
+            <button class="button" v-on:click="goLogin()">Войти</button>
+
+        </div>
+
+    </div>
+
+    <form method="post" id="go-library-form" style="display:none" action="~/Home/Library">
+        <input id="input-library-username" name="userName" />
+    </form>
+
+    <form method="post" id="go-login-form" style="display:none" action="~/Home/Login">
+        <input id="input-login-camefrom" name="cameFrom" />
+        <input id="input-login-filmid" name="filmId" />
+    </form>
+
+    <script>
+
+        var passedUserName = '@Model.UserName'
+        var passedFilmId = '@Model.FilmId'
+
+    </script>
+
+    <script src="~/js/more-info.js"></script>
+
+</body>

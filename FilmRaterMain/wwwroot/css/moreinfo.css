@@ -1,0 +1,264 @@
+﻿* {
+    box-sizing: border-box;
+    font-family: Noto Sans, sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.button {
+    width: 50%;
+    height: 30px;
+    border-radius: 5px;
+    border-color: grey;
+    margin-left: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.outer-outer-container {
+    width: 1500px;
+    display: flex;
+}
+
+.back-button-container {
+    width: 10%;
+    display: flex;
+    margin-top: 2%;
+}
+
+.back-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 0px;
+    position: sticky;
+    left: 900px;
+    margin-right: 1%;
+}
+
+.back-button:hover {
+    cursor: pointer;
+}
+
+.outer-container {
+    width: 1200px;
+    display: block;
+    box-shadow: 0 0 0 2px white, 0.3em 0.3em 1em rgb(0 0 0 / 60%);
+    min-height: 800px;
+    margin-top: 2%;
+}
+
+.user-container {
+    width: 10%;
+    display: block;
+    margin-top: 2%;
+    padding: 1%;
+}
+
+.basic-text {
+    margin-left: 5%;
+    margin-top: -1%;
+    margin-bottom: -1%;
+}
+
+.user-name {
+    color: #005;
+    font-size: 18px;
+    margin-left: 5%;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.info-and-cover {
+    display: flex;
+}
+
+.cover-container {
+    display: block;
+    width: 30%;
+    margin: 2%;
+}
+
+.film-info-container {
+    display: block;
+    width: 70%;
+    margin-top: 2%;
+}
+
+.film-name {
+    font-family: tahoma, verdana, arial;
+    font-size: 30px;
+    color: #f60;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.film-name-blue {
+    font-family: tahoma, verdana, arial;
+    font-size: 30px;
+    color: #005;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+    .film-name-blue:hover {
+        cursor: pointer;
+    }
+
+.film-table {
+    width: 100%;
+}
+
+.film-table, tr {
+    border-collapse: collapse;
+}
+
+.header-cell {
+    width: 30%;
+}
+
+.table-header {
+    text-align: start;
+    color: #999;
+    margin: 2%;
+}
+
+.info-cell {
+    width: 70%;
+}
+
+.table-info {
+    text-align: start;
+    margin: 2%;
+}
+
+.rating {
+    text-align: start;
+    margin: 2%;
+    color: #f60;
+}
+
+.film-synopsis-container {
+    width: 100%;
+}
+
+.selected-star {
+    color: orange;
+}
+
+.synopsis {
+    font-size: 18px;
+    margin: 2%;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+    margin: 40% 0 5% 560px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.synopsis {
+    font-size: 16px;
+}
+
+.film-rating-container {
+    margin: 2%;
+    font-size: 30px;
+}
+
+.rating-header {
+    font-size: 22px;
+}
+
+.comment-list-container {
+    margin: 2%;
+    border: 1px solid black ;
+}
+
+.comment-write-container {
+    margin: 2%;
+    display: grid;
+}
+
+.comment-container-header {
+    margin-bottom: 2%;
+}
+
+.comment-textarea {
+    width: 500px;
+    height: 200px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    border-radius: 7px;
+    resize: none;
+    padding: 1%;
+}
+
+.comment-send-button {
+    width: 200px;
+    height: 40px;
+    border-radius: 7px;
+}
+
+.comment-send-button:hover {
+    cursor: pointer;
+}
+
+.comment-container {
+    border: 1px solid black;
+    margin: 2%;
+    border-radius: 7px;
+}
+
+.comment-container-header {
+    margin-left: 2%;
+    margin-top: 1%;
+}
+
+.comment-user-name {
+    margin-top: 1%;
+    margin-left: 1%;
+    font-size: 18px;
+    color: #005;
+}
+
+.my-comment-user-name {
+    margin-top: 1%;
+    margin-left: 1%;
+    font-size: 18px;
+    color: #f60;
+}
+
+.comment-rating-container {
+    margin-top: 1%;
+    margin-left: 1%;
+}
+
+.comment {
+    margin-top: 1%;
+    margin-left: 1%;
+    margin-bottom: 1%;
+}

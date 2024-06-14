@@ -1,54 +1,83 @@
-﻿<!DOCTYPE html>
+﻿@model LoginModel
 
-<html lang="ru">
+<!DOCTYPE html>
 
-    <head>
+<head>
 
-        <meta charset="utf-8" />
+    <meta charset="utf-8" />
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script src="https://unpkg.com/vue@3.4.21/dist/vue.global.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue@3.4.21/dist/vue.global.js"></script>
 
-        <link rel="stylesheet" href="~/css/logIn.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/logIn.css" asp-append-version="true" />
 
-    </head>
+</head>
 
-    <body>
+<body>
 
-        <div class="main-container" id="authentication-form">
+    <div class="main-container" id="authentication-form">
 
-            <div class="log-in-register-form" v-show="regMode == false">
+        <div class="log-in-register-form" v-show="regMode == false">
 
-                <input class="textbox" type="text" placeholder="Логин" v-model="login" />
-                <input class="textbox" type="password" placeholder="Пароль" v-model="password" />
-                <button class="button" v-on:click="tryLogIn()">Войти</button>
-                <button class="switch-button" v-on:click="regMode = true">Нет аккаунта? Зарегестрироваться</button>
-                <p class="error-message" v-show="logInError == true">Неверные логин/пароль</p>
-            <p class="error-message" v-show="logInErrorFill == true">Заполните все поля</p>
-
-            </div>
-
-            <div class="log-in-register-form" v-show="regMode == true">
-
-                <input class="textbox" type="text" placeholder="Логин" v-model="loginRegister" />
-                <input class="textbox" type="password" placeholder="Пароль" v-model="password1" />
-                <input class="textbox" type="password" placeholder="Подтвердите пароль" v-model="password2" />
-                <button class="button" v-on:click="tryRegister()">Зарегестрироваться</button>
-                <button class="switch-button" v-on:click="regMode = false">Есть акаунт? Войти</button>
-                <p class="error-message" v-show="regErrorPassword == true">Пароли не совпадают</p>
-                <p class="error-message" v-show="regErrorTaken == true">Пользователь с таким именем уже существует</p>
-                <p class="error-message" v-show="regErrorFill == true">Заполните все поля</p>
-
-            </div>
-
-            <form method="post" id="open-library-form" style="display:none" action="~/Home/Library">
-                <input />
-            </form>
+            <input class="textbox" type="text" placeholder="Логин" v-model="login" />
+            <input class="textbox" type="password" placeholder="Пароль" v-model="password" />
+            <button class="button" v-on:click="tryLogIn()">Войти</button>
+            <button class="switch-button" v-on:click="regMode = true">Нет аккаунта? Зарегестрироваться</button>
+            <p class="error-message" v-show="logInError == true">Неверные логин/пароль</p>
+        <p class="error-message" v-show="logInErrorFill == true">Заполните все поля</p>
 
         </div>
 
-        <script src="~/js/login-script.js"></script>
+        <div class="log-in-register-form" v-show="regMode == true">
 
-    </body>
+            <input class="textbox" type="text" placeholder="Логин" v-model="loginRegister" />
+            <input class="textbox" type="password" placeholder="Пароль" v-model="password1" />
+            <input class="textbox" type="password" placeholder="Подтвердите пароль" v-model="password2" />
+            <button class="button" v-on:click="tryRegister()">Зарегестрироваться</button>
+            <button class="switch-button" v-on:click="regMode = false">Есть акаунт? Войти</button>
+            <p class="error-message" v-show="regErrorPassword == true">Пароли не совпадают</p>
+            <p class="error-message" v-show="regErrorTaken == true">Пользователь с таким именем уже существует</p>
+            <p class="error-message" v-show="regErrorFill == true">Заполните все поля</p>
 
-</html>
+        </div>
+
+        <form method="post" id="try-login-form" style="display:none" action="~/Home/TryLogIn">
+            <input id="input-login-username" name="userName" />
+            <input id="input-login-password" name="password" />
+            <input id="input-login-camefrom" name="cameFrom" />
+            <input id="input-login-filmid" name="filmId" />
+        </form>
+
+        <form method="post" id="try-register-form" style="display:none" action="~/Home/TryRegister">
+            <input id="input-register-username" name="userName" />
+            <input id="input-register-password" name="password" />
+            <input id="input-register-camefrom" name="cameFrom" />
+            <input id="input-register-filmid" name="filmId" />
+        </form>
+
+    </div>
+
+    <script>
+
+        var cameFrom = '@Model.CameFrom'
+        var passedError = '@Model.ErrorType'
+        var passedFilmId = '@Model.FilmId'
+
+        var showRegistration = false
+        var loginTakenError = false
+        var wrongCridentialsError = false
+
+        if (passedError == 'LoginTakenError') {
+            showRegistration = true
+            loginTakenError = true
+        }
+
+        else if (passedError == 'WrongCridentialsError') {
+            wrongCridentialsError = true
+        }
+
+    </script>
+
+    <script src="~/js/login.js"></script>
+
+</body>

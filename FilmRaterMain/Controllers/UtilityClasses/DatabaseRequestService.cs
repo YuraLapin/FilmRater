@@ -1,30 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Data.SqlTypes;
+﻿using System.Data.SqlTypes;
 using System.Text;
 
 namespace FilmRaterMain.Controllers.UtilityClasses
 {
-    public class FilmData
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public int Year { get; set; }
-        public int Duration { get; set; }
-    }
-
-    public class CompleteFilmData
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public int Year { get; set; }
-        public int Duration { get; set; }
-        public List<string> Genres { get; set; }
-        public List<string> Directors { get; set; }
-        public List<string> Countries { get; set; }
-        public float Rating { get; set; }
-        public int CurrentUserRating { get; set; }
-    }
-
     public class DatabaseRequestService
     {
         private DbConfiguration config;
@@ -40,9 +18,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
         {
             var storedHash = new List<string>();
 
-            MySql.Data.MySqlClient.MySqlConnection conn;
-
-            using (conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
             {
                 await conn.OpenAsync();
 
@@ -67,9 +43,8 @@ namespace FilmRaterMain.Controllers.UtilityClasses
         public async Task<bool> TryRegister(string login, string hashedPassword)
         {
             bool res;
-            MySql.Data.MySqlClient.MySqlConnection conn;
 
-            using (conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
             {
                 await conn.OpenAsync();
 
@@ -111,9 +86,8 @@ namespace FilmRaterMain.Controllers.UtilityClasses
         public async Task<bool> UserNameIsFree(string userName)
         {
             bool res;
-            MySql.Data.MySqlClient.MySqlConnection conn;
 
-            using (conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
             {
                 await conn.OpenAsync();
 
@@ -150,9 +124,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
         {
             var genres = new List<string>();
 
-            MySql.Data.MySqlClient.MySqlConnection conn;
-
-            using (conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
             {
                 await conn.OpenAsync();
 
@@ -173,9 +145,9 @@ namespace FilmRaterMain.Controllers.UtilityClasses
             return genres;
         }
 
-        public async Task<List<CompleteFilmData>> GetLibrary(string userName, List<string> genres, float minScore, float maxScore, int minYear, int maxYear, int page)
+        public async Task<List<LibraryEntry>> GetLibrary(string userName, List<string> genres, float minScore, float maxScore, int minYear, int maxYear, int page)
         {
-            var library = new List<CompleteFilmData>();
+            var library = new List<LibraryEntry>();
 
             var genreFilter = new StringBuilder();
             foreach (var genre in genres)
@@ -184,9 +156,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                 genreFilter = genreFilter.AppendLine(",");
             }
 
-            MySql.Data.MySqlClient.MySqlConnection conn;
-
-            using (conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
             {
                 await conn.OpenAsync();
 
@@ -202,7 +172,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                 {
                     while (await reader.ReadAsync())
                     {
-                        var newFilm = new CompleteFilmData()
+                        var newFilm = new LibraryEntry()
                         {
                             Id = reader.GetString(0),
                             Name = reader.GetString(1),
@@ -213,7 +183,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                         };
                         try
                         {
-                            newFilm.Rating = reader.GetInt32(6);
+                            newFilm.Rating = reader.GetFloat(6);
                         }
                         catch (SqlNullValueException)
                         {
@@ -239,15 +209,23 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                         }
                     }
 
-                    cmd.CommandText = "SELECT user_score.score FROM user_score WHERE user_score.film_id = @film_id AND user_score.user_name = @user_name;";
-                    cmd.Parameters.AddWithValue("@user_name", userName);
-                    using (var reader = await cmd.ExecuteReaderAsync())
+                    if (userName != "")
                     {
-                        while (await reader.ReadAsync())
+                        cmd.CommandText = "SELECT user_score.score FROM user_score WHERE user_score.film_id = @film_id AND user_score.user_name = @user_name;";
+                        cmd.Parameters.AddWithValue("@user_name", userName);
+                        using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            currentUserRating = reader.GetInt32(0);
+                            while (await reader.ReadAsync())
+                            {
+                                currentUserRating = reader.GetInt32(0);
+                            }
                         }
                     }
+                    else
+                    {
+                        currentUserRating = 0;
+                    }
+                    
 
                     film.Genres = currentGenres;
                     film.CurrentUserRating = currentUserRating;
@@ -262,9 +240,8 @@ namespace FilmRaterMain.Controllers.UtilityClasses
         public async Task<MinMaxYears> GetMinMaxYears()
         {
             var years = new MinMaxYears();
-            MySql.Data.MySqlClient.MySqlConnection conn;
 
-            using (conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
             {
                 await conn.OpenAsync();
 
@@ -286,9 +263,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
 
         public async Task<bool> UpdateUserScore(int filmId, string userName, int userScore)
         {
-            MySql.Data.MySqlClient.MySqlConnection conn;
-
-            using (conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
             {
                 await conn.OpenAsync();
 
@@ -325,10 +300,8 @@ namespace FilmRaterMain.Controllers.UtilityClasses
             return true;
         }
 
-        public async Task<int> GetTotalPages(string userName, List<string> genres, float minScore, float maxScore, int minYear, int maxYear)
+        public async Task<int> GetTotalPages(List<string> genres, float minScore, float maxScore, int minYear, int maxYear)
         {
-            MySql.Data.MySqlClient.MySqlConnection conn;
-
             int pages = 1;
 
             var genreFilter = new StringBuilder();
@@ -338,7 +311,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                 genreFilter = genreFilter.AppendLine(",");
             }
 
-            using (conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
             {
                 await conn.OpenAsync();
 
@@ -361,6 +334,127 @@ namespace FilmRaterMain.Controllers.UtilityClasses
             }
 
             return pages;
+        }
+
+        public async Task<FullFilmData> GetFullFilmData(string userName, string filmId)
+        {
+            var filmData = new FullFilmData();
+
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            {
+                await conn.OpenAsync();
+
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT film.film_id, film.film_name, film.film_year, film.film_duration, film.film_slogan, film.film_synopsis, \r\nGROUP_CONCAT(DISTINCT director.director_name SEPARATOR ', ') AS directors,\r\nGROUP_CONCAT(DISTINCT country.country_name SEPARATOR ', ') AS countries,\r\nGROUP_CONCAT(DISTINCT genre.genre_name SEPARATOR ', ') AS genres,\r\nAVG(user_score.score) AS rating\r\n\tFROM film\r\n\t\tLEFT JOIN film_genre ON film_genre.film_id = film.film_id\r\n\t\tLEFT JOIN genre ON genre.genre_id = film_genre.genre_id\r\n        LEFT JOIN film_director ON film_director.film_id = film.film_id\r\n        LEFT JOIN director ON director.director_id = film_director.director_id\r\n        LEFT JOIN film_country ON film_country.film_id = film.film_id\r\n        LEFT JOIN country ON country.country_id = film_country.country_id\r\n        LEFT JOIN user_score ON user_score.film_id = film.film_id\r\n\tWHERE film.film_id = @film_id\r\n\tGROUP BY film.film_id;";
+                cmd.Parameters.AddWithValue("@film_id", filmId);
+
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        filmData.Id = filmId;
+                        filmData.Name = reader.GetString(1);
+                        filmData.Year = reader.GetInt32(2);
+                        filmData.Duration = reader.GetInt32(3);
+                        filmData.Slogan = reader.GetString(4);
+                        filmData.Synopsis = reader.GetString(5);
+                        filmData.Directors = reader.GetString(6).Split(", ").ToList();
+                        filmData.Countries = reader.GetString(7).Split(", ").ToList();
+                        filmData.Genres = reader.GetString(8).Split(", ").ToList();
+                        try
+                        {
+                            filmData.Rating = reader.GetFloat(9);
+                        }
+                        catch (SqlNullValueException)
+                        {
+                            filmData.Rating = 0;
+                        }
+                    }
+                }
+
+                if (userName != "")
+                {
+                    cmd.CommandText = "SELECT score FROM user_score WHERE film_id = @film_id AND user_name = @user_name";
+                    cmd.Parameters.AddWithValue("@user_name", userName);
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            try
+                            {
+                                filmData.CurrentUserRating = reader.GetInt32(0);
+                            }
+                            catch (SqlNullValueException)
+                            {
+                                filmData.CurrentUserRating = 0;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    filmData.CurrentUserRating = 0;
+                }
+
+            }
+
+            return filmData;
+        }
+
+        public async Task<List<Comment>> GetFilmComments(string filmId)
+        {
+            var comments = new List<Comment>();
+
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            {
+                await conn.OpenAsync();
+
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT film_comment.user_name, film_comment.comment_text, user_score.score\r\n\tFROM film_comment\r\n\t\tLEFT JOIN user_score ON user_score.film_id = film_comment.film_id AND user_score.user_name = film_comment.user_name\r\n\tWHERE film_comment.film_id = @film_id;";
+                cmd.Parameters.AddWithValue("@film_id", filmId);
+
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        var newComment = new Comment()
+                        {
+                            UserName = reader.GetString(0),
+                            Text = reader.GetString(1),
+                        };
+                        try
+                        {
+                            newComment.UserScore = reader.GetInt32(2);
+                        }
+                        catch (SqlNullValueException)
+                        {
+                            newComment.UserScore = 0;
+                        }
+                        comments.Add(newComment);  
+                    }
+                }
+            }
+
+            return comments;
+        }
+
+        public async Task<bool> UploadComment(string filmId, string userName, string commentText)
+        {
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            {
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandText = "INSERT INTO film_comment (film_id, user_name, comment_text) VALUES (@film_id, @user_name, @comment_text);";
+                cmd.Parameters.AddWithValue("@film_id", filmId);
+                cmd.Parameters.AddWithValue("@user_name", userName);
+                cmd.Parameters.AddWithValue("@comment_text", commentText);
+
+                await cmd.ExecuteNonQueryAsync();
+            }
+
+            return true;
         }
     }
 }

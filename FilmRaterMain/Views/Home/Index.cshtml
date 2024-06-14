@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="en">
-    <head>
+<head>
 
-        <meta charset="utf-8" />
+    <meta charset="utf-8" />
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
-    </head>
+</head>
 
-    <body>
+<body>
 
-        <form method="post" id="throw-to-login-form" style="display:none" action="~/Home/Login">
-            <input></input>
-        </form>
+    <form method="post" id="throw-to-login-form" style="display:none" action="/Home/Library">
+        <input id="hidden-form-input" name="userName" />
+    </form>
 
-        <script>
+    <script>
 
-            $("#throw-to-login-form").submit()
+        $("#hidden-form-input").val("")
+        $("#throw-to-login-form").submit()
 
-        </script>
+    </script>
 
-    </body>
+</body>
 
-</html>

@@ -1,82 +1,23 @@
 ﻿using FilmRaterMain.Controllers.UtilityClasses;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace FilmRaterMain.Controllers
 {
-    public class LoginWithPassword
-    {
-        public string Login { get; set; }
-        public string Password { get; set; }
-    }
-
-    public class UserNameAndFilters
-    {
-        public string UserName { get; set; }
-        public List<string> Genres { get; set; }
-        public float MinScore { get; set; }
-        public float MaxScore { get; set; }
-        public int MinYear { get; set; }
-        public int MaxYear { get; set; }
-        public int Page { get; set; }
-    }
-
-    public class MinMaxYears
-    {
-        public int MinYear { get; set;}
-        public int MaxYear { get; set;}
-    }
-
-    public class FilmScoreUpdate
-    {
-        public int FilmId { get; set; }
-        public string UserName { get; set; }
-        public int UserScore { get; set; }
-    }
-
     [ApiController]
     [Route("Home/api/requests")]
     public class RequestController : ControllerBase
     {
-        DatabaseRequestService requestClass;
-        PasswordHashService passwordHashService;
+        DatabaseRequestService databaseRequestService;
 
         public RequestController()
         {
-            requestClass = new DatabaseRequestService();
-            passwordHashService = new PasswordHashService();
-        }
-
-        [HttpPost("TryLogIn")]
-        public async Task<IActionResult> TryLogIn([FromBody] LoginWithPassword loginWithPassword)
-        {
-            if (await requestClass.UserNameIsFree(loginWithPassword.Login))
-            {
-                return Ok(false);
-            }
-
-            string storedHash = await requestClass.GetStoredHash(loginWithPassword.Login);
-
-            bool success = passwordHashService.CheckHash(storedHash, loginWithPassword.Password);
-
-            return Ok(success);
-        }
-
-        [HttpPost("TryRegister")]
-        public async Task<IActionResult> TryRegister([FromBody] LoginWithPassword loginWithPassword)
-        {
-            string hashedPassword = passwordHashService.HashPassword(loginWithPassword.Password);
-
-            bool res = await requestClass.TryRegister(loginWithPassword.Login, hashedPassword);
-
-            return Ok(res);
+            databaseRequestService = new DatabaseRequestService();
         }
 
         [HttpGet("GetGenres")]
         public async Task<IActionResult> GetGenres()
         {
-            var genres = await requestClass.GetGenres();
+            var genres = await databaseRequestService.GetGenres();
 
             return Ok(genres);
         }
@@ -84,7 +25,7 @@ namespace FilmRaterMain.Controllers
         [HttpPost("GetLibrary")]
         public async Task<IActionResult> GetLibrary([FromBody] UserNameAndFilters userNameAndFilters)
         {
-            var library = await requestClass.GetLibrary(userNameAndFilters.UserName, userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear, userNameAndFilters.Page);
+            var library = await databaseRequestService.GetLibrary(userNameAndFilters.UserName, userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear, userNameAndFilters.Page);
 
             return Ok(library);
         }
@@ -92,7 +33,7 @@ namespace FilmRaterMain.Controllers
         [HttpGet("GetMinMaxYears")]
         public async Task<IActionResult> GetMinMaxYears()
         {
-            var years = await requestClass.GetMinMaxYears();
+            var years = await databaseRequestService.GetMinMaxYears();
 
             return Ok(years);
         }
@@ -100,13 +41,31 @@ namespace FilmRaterMain.Controllers
         [HttpPost("UpdateUserScore")]
         public async Task<IActionResult> UpdateUserScore([FromBody] FilmScoreUpdate filmScoreUpdate)
         {
-            return Ok(await requestClass.UpdateUserScore(filmScoreUpdate.FilmId, filmScoreUpdate.UserName, filmScoreUpdate.UserScore));
+            return Ok(await databaseRequestService.UpdateUserScore(filmScoreUpdate.FilmId, filmScoreUpdate.UserName, filmScoreUpdate.UserScore));
         }
 
         [HttpPost("GetTotalPages")]
         public async Task<IActionResult> GetTotalPages([FromBody] UserNameAndFilters userNameAndFilters)
         {
-            return Ok(await requestClass.GetTotalPages(userNameAndFilters.UserName, userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear));
+            return Ok(await databaseRequestService.GetTotalPages(userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear));
+        }
+
+        [HttpPost("GetFullFilmData")]
+        public async Task<IActionResult> GetFullFilmData([FromBody] UserNameAndFilmId userNameAndFilmId )
+        {
+            return Ok(await databaseRequestService.GetFullFilmData(userNameAndFilmId.UserName, userNameAndFilmId.FilmId));
+        }
+
+        [HttpPost("GetFilmComments")]
+        public async Task<IActionResult> GetFilmComments([FromBody] WrappedFilmId filmId)
+        {
+            return Ok(await databaseRequestService.GetFilmComments(filmId.filmId));
+        }
+
+        [HttpPost("UploadComment")]
+        public async Task<IActionResult> UploadComment([FromBody] NewCommentData commentData)
+        {
+            return Ok(await databaseRequestService.UploadComment(commentData.FilmId, commentData.UserName, commentData.Text));
         }
     }
 }
