@@ -9,5 +9,6 @@
         public int MinYear { get; set; }
         public int MaxYear { get; set; }
         public int Page { get; set; }
+        public string NameFilter { get; set; }
     }
 }

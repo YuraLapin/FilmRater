@@ -25,7 +25,7 @@ namespace FilmRaterMain.Controllers
         [HttpPost("GetLibrary")]
         public async Task<IActionResult> GetLibrary([FromBody] UserNameAndFilters userNameAndFilters)
         {
-            var library = await databaseRequestService.GetLibrary(userNameAndFilters.UserName, userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear, userNameAndFilters.Page);
+            var library = await databaseRequestService.GetLibrary(userNameAndFilters.UserName, userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear, userNameAndFilters.Page, userNameAndFilters.NameFilter);
 
             return Ok(library);
         }
@@ -47,7 +47,7 @@ namespace FilmRaterMain.Controllers
         [HttpPost("GetTotalPages")]
         public async Task<IActionResult> GetTotalPages([FromBody] UserNameAndFilters userNameAndFilters)
         {
-            return Ok(await databaseRequestService.GetTotalPages(userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear));
+            return Ok(await databaseRequestService.GetTotalPages(userNameAndFilters.Genres, userNameAndFilters.MinScore, userNameAndFilters.MaxScore, userNameAndFilters.MinYear, userNameAndFilters.MaxYear, userNameAndFilters.NameFilter));
         }
 
         [HttpPost("GetFullFilmData")]

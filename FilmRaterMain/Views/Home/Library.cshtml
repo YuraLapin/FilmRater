@@ -32,8 +32,8 @@
 
             <div class="search-bar-container">
 
-                <input class="search-input" type="text" placeholder="Поиск по названию" maxlength="99" />
-                <button class="search-button"><i class="fa fa-search"></i></button>
+                <input class="search-input" type="text" placeholder="Поиск по названию" maxlength="99" v-model="nameFilter" v-on:keypress="checkKeyCodeAndUpdate($event)" spellcheck="false" />
+                <button class="search-button" v-on:click="updateLibrary(1)"><i class="fa fa-search"></i></button>
 
             </div>
 

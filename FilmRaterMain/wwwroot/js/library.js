@@ -8,6 +8,7 @@ const Library = {
             maxScore: "",
             minYear: "",
             maxYear: "",
+            nameFilter: "",
             minYearDefault: "",
             maxYearDefault: "",
             genres: [],
@@ -60,6 +61,7 @@ const Library = {
                     "minYear": vm.minYear,
                     "maxYear": vm.maxYear,
                     "page": page,
+                    "nameFilter": vm.nameFilter,
                 }),
                 success: function (result) {
                     vm.library = result
@@ -125,6 +127,7 @@ const Library = {
                     "minYear": vm.minYear,
                     "maxYear": vm.maxYear,
                     "page": 1,
+                    "nameFilter": vm.nameFilter,
                 }),
                 success: function (result) {
                     vm.totalPages = result
@@ -133,6 +136,11 @@ const Library = {
         },
         createRange(start, stop, step) {
             return Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step)
+        },
+        checkKeyCodeAndUpdate(e) {
+            if (e.keyCode == 13) {
+                vm.updateLibrary(1)
+            }
         },
     },    
 }

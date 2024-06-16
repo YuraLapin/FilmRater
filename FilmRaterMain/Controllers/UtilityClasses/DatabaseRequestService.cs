@@ -145,7 +145,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
             return genres;
         }
 
-        public async Task<List<LibraryEntry>> GetLibrary(string userName, List<string> genres, float minScore, float maxScore, int minYear, int maxYear, int page)
+        public async Task<List<LibraryEntry>> GetLibrary(string userName, List<string> genres, float minScore, float maxScore, int minYear, int maxYear, int page, string nameFilter)
         {
             var library = new List<LibraryEntry>();
 
@@ -163,12 +163,13 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                 await conn.OpenAsync();
 
                 var cmd = conn.CreateCommand();
-                cmd.CommandText = $"SELECT film.film_id, film_name, film_year, film_duration, \r\nGROUP_CONCAT(DISTINCT director.director_name SEPARATOR ', ') AS directors,\r\nGROUP_CONCAT(DISTINCT country.country_name SEPARATOR ', ') AS countries,\r\nAVG(user_score.score) AS rating\r\n\tFROM film\r\n\t\tJOIN film_genre ON film_genre.film_id = film.film_id\r\n\t\tJOIN genre ON genre.genre_id = film_genre.genre_id\r\n        JOIN film_director ON film_director.film_id = film.film_id\r\n        JOIN director ON director.director_id = film_director.director_id\r\n        JOIN film_country ON film_country.film_id = film.film_id\r\n        JOIN country ON country.country_id = film_country.country_id\r\n        LEFT JOIN user_score ON user_score.film_id = film.film_id\r\n\tWHERE FIND_IN_SET(genre.genre_name, @genre_filter) OR @genre_filter = ''\r\n\tGROUP BY film.film_id\r\n\tHAVING film.film_year >= @min_year AND film.film_year <= @max_year\r\n    AND (AVG(user_score.score) >= @min_rating AND AVG(user_score.score) <= @max_rating) OR COUNT(user_score.score) = 0\r\n    LIMIT { (page - 1) * pageSize }, { pageSize };";
+                cmd.CommandText = $"SELECT film.film_id, film_name, film_year, film_duration, \r\nGROUP_CONCAT(DISTINCT director.director_name SEPARATOR ', ') AS directors,\r\nGROUP_CONCAT(DISTINCT country.country_name SEPARATOR ', ') AS countries,\r\nAVG(user_score.score) AS rating\r\n\tFROM film\r\n\t\tJOIN film_genre ON film_genre.film_id = film.film_id\r\n\t\tJOIN genre ON genre.genre_id = film_genre.genre_id\r\n        JOIN film_director ON film_director.film_id = film.film_id\r\n        JOIN director ON director.director_id = film_director.director_id\r\n        JOIN film_country ON film_country.film_id = film.film_id\r\n        JOIN country ON country.country_id = film_country.country_id\r\n        LEFT JOIN user_score ON user_score.film_id = film.film_id\r\n\tWHERE FIND_IN_SET(genre.genre_name, @genre_filter) OR @genre_filter = ''\r\n\tAND INSTR(film.film_name, @name_filter) OR @name_filter = ''\r\n\tGROUP BY film.film_id\r\n\tHAVING film.film_year >= @min_year AND film.film_year <= @max_year\r\n    AND (AVG(user_score.score) >= @min_rating AND AVG(user_score.score) <= @max_rating) OR COUNT(user_score.score) = 0\r\n    LIMIT { (page - 1) * pageSize }, { pageSize };";
                 cmd.Parameters.AddWithValue("@min_rating", minScore);
                 cmd.Parameters.AddWithValue("@max_rating", maxScore);
                 cmd.Parameters.AddWithValue("@min_year", minYear);
                 cmd.Parameters.AddWithValue("@max_year", maxYear);
                 cmd.Parameters.AddWithValue("@genre_filter", genreFilter.ToString());
+                cmd.Parameters.AddWithValue("@name_filter", nameFilter);
 
                 using (var reader = await cmd.ExecuteReaderAsync())
                 {
@@ -302,7 +303,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
             return true;
         }
 
-        public async Task<int> GetTotalPages(List<string> genres, float minScore, float maxScore, int minYear, int maxYear)
+        public async Task<int> GetTotalPages(List<string> genres, float minScore, float maxScore, int minYear, int maxYear, string nameFilter)
         {
             int pages = 1;
 
@@ -318,12 +319,13 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                 await conn.OpenAsync();
 
                 var cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT COUNT(*) FROM\r\n(\r\nSELECT film.film_id, film.film_name, film.film_year, film.film_duration, \r\nGROUP_CONCAT(DISTINCT director.director_name SEPARATOR ', ') AS directors,\r\nGROUP_CONCAT(DISTINCT country.country_name SEPARATOR ', ') AS countries,\r\nAVG(user_score.score) AS rating\r\n\tFROM film\r\n\t\tJOIN film_genre ON film_genre.film_id = film.film_id\r\n\t\tJOIN genre ON genre.genre_id = film_genre.genre_id\r\n        JOIN film_director ON film_director.film_id = film.film_id\r\n        JOIN director ON director.director_id = film_director.director_id\r\n        JOIN film_country ON film_country.film_id = film.film_id\r\n        JOIN country ON country.country_id = film_country.country_id\r\n        LEFT JOIN user_score ON user_score.film_id = film.film_id\r\n\tWHERE FIND_IN_SET(genre.genre_name, @genre_filter) OR @genre_filter = \"\"\r\n\tGROUP BY film.film_id\r\n\tHAVING film.film_year >= @min_year AND film.film_year <= @max_year\r\n    AND (AVG(user_score.score) >= @min_rating AND AVG(user_score.score) <= @max_rating) OR COUNT(user_score.score) = 0\r\n) AS a;";
+                cmd.CommandText = "SELECT COUNT(*) FROM\r\n(\r\nSELECT film.film_id, film.film_name, film.film_year, film.film_duration, \r\nGROUP_CONCAT(DISTINCT director.director_name SEPARATOR ', ') AS directors,\r\nGROUP_CONCAT(DISTINCT country.country_name SEPARATOR ', ') AS countries,\r\nAVG(user_score.score) AS rating\r\n\tFROM film\r\n\t\tJOIN film_genre ON film_genre.film_id = film.film_id\r\n\t\tJOIN genre ON genre.genre_id = film_genre.genre_id\r\n        JOIN film_director ON film_director.film_id = film.film_id\r\n        JOIN director ON director.director_id = film_director.director_id\r\n        JOIN film_country ON film_country.film_id = film.film_id\r\n        JOIN country ON country.country_id = film_country.country_id\r\n        LEFT JOIN user_score ON user_score.film_id = film.film_id\r\n\tWHERE FIND_IN_SET(genre.genre_name, @genre_filter) OR @genre_filter = ''\r\n\tAND INSTR(film.film_name, @name_filter) OR @name_filter = ''\r\n\tGROUP BY film.film_id\r\n\tHAVING film.film_year >= @min_year AND film.film_year <= @max_year\r\n    AND (AVG(user_score.score) >= @min_rating AND AVG(user_score.score) <= @max_rating) OR COUNT(user_score.score) = 0\r\n) AS a;";
                 cmd.Parameters.AddWithValue("@min_rating", minScore);
                 cmd.Parameters.AddWithValue("@max_rating", maxScore);
                 cmd.Parameters.AddWithValue("@min_year", minYear);
                 cmd.Parameters.AddWithValue("@max_year", maxYear);
                 cmd.Parameters.AddWithValue("@genre_filter", genreFilter.ToString());
+                cmd.Parameters.AddWithValue("@name_filter", nameFilter);
 
                 using (var reader = await cmd.ExecuteReaderAsync())
                 {
