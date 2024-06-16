@@ -1,7 +1,7 @@
 * {
     box-sizing: border-box;
     font-family: Noto Sans, sans-serif;
-    color: rgb(210, 210, 210);
+    color: rgb(255, 255, 255);
     font-size: 16px;
     margin: 0;
     padding: 0;
@@ -27,7 +27,7 @@ body {
     backdrop-filter: blur(100px);
     display: flex;
     justify-content: center;
-    background-color: rgba(15, 15, 15, 0.25);
+    background-color: rgba(15, 15, 15, 0.35);
     z-index: 2 !important;
 }
 
