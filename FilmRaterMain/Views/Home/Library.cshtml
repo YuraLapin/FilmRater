@@ -2,6 +2,8 @@
 
 <!DOCTYPE html>
 
+<html lang="ru">
+
 <head>
 
     <meta charset="utf-8" />
@@ -12,174 +14,206 @@
     <link rel="stylesheet" href="~/css/library.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
+    <script src="https://kit.fontawesome.com/9d04c2dd40.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
 
-    <div id="library">
+    <div id="library" class="outer-container">
 
-        <p class="header">Фильмотека</p>
+        <div class="nav-bar" id="nav-bar">
 
-        <div class="outer-container">
+            <div class="nav-bar-header-container">
 
-            <div class="filter-container">
-
-                <div class="filter-group">
-
-                    <p class="filter-header">Фильтр рейтинга</p>
-
-                    <div class="textbox-and-text">
-
-                        <p>От: </p>
-                        <input class="textbox" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="minScore" />
-
-                    </div>
-
-                    <div class="textbox-and-text">
-
-                        <p>До: </p>
-                        <input class="textbox" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="maxScore" />
-
-                    </div>
-
-                </div>
-
-                <div class="filter-group">
-
-                    <p class="filter-header">Фильтр года</p>
-
-                    <div class="textbox-and-text">
-
-                        <p>От: </p>
-                        <input class="textbox" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="minYear" />
-
-                    </div>
-
-                    <div class="textbox-and-text">
-
-                        <p>До: </p>
-                        <input class="textbox" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="maxYear" />
-
-                    </div>
-
-                </div>
-
-                <div class="filter-group">
-
-                    <p class="filter-header">Фильтр жанров</p>
-
-                    <div class="genre-filter-checkbox" v-for="genre in genres">
-
-                        <input type="checkbox" v-on:change="checkGenre($event, genre)" />
-                        <p>{{ genre }}</p>
-
-                    </div>
-
-                </div>
-
-                <button class="button" v-on:click="updateLibrary(currentPage)">Обновить</button>
-
+                <p class="nav-bar-header">Фильмотека</p>
 
             </div>
 
-            <div class="library-container">
+            <div class="search-bar-container">
 
-                <div class="paging-buttons-container" v-if="totalPages > 1">
+                <input class="search-input" type="text" placeholder="Поиск по названию" maxlength="99" />
+                <button class="search-button"><i class="fa fa-search"></i></button>
 
-                    <button class="paging-button" v-bind:disabled="currentPage <= 1" v-on:click="updateLibrary(currentPage + 1)">&lt</button>
-                    <button class="paging-button" v-for="page in createRange(Math.max(Math.min(currentPage + 2, totalPages) - 5, 1), Math.min(Math.max(currentPage - 2, 1) + 5, totalPages), 1)" v-on:click="updateLibrary(page)" v-bind:class="{ 'inactive-paging-button': page == currentPage }" v-bind:disabled="page == currentPage">{{ page }}</button>
-                    <button class="paging-button" v-bind:disabled="currentPage >= totalPages" v-on:click="updateLibrary(currentPage + 1)">&gt</button>
+            </div>
+
+            <div class="nav-bar-user-container">
+
+                <button class="user-button" v-on:click="showUserInfo = true"><i class="fas">&#xf406;</i></button>
+
+            </div>
+
+        </div>
+
+        <div class="main-part-container" v-show="loading < 1">
+
+            <div class="side-bar-container">
+
+                <p class="side-bar-header">Фильтры</p>
+
+                <div class="filter-group">
+
+                    <p class="filter-group-header">Год</p>
+
+                    <div class="text-and-input">
+
+                        <p class="input-text">От:</p>
+                        <input class="input" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="minYear" />
+                    
+                    </div>
+
+                    <div class="text-and-input">
+
+                        <p class="input-text">До:</p>
+                        <input class="input" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="maxYear" />
+
+                    </div>
 
                 </div>
 
-                <div class="film-container" v-for="film in library" v-if="library.length > 0">
+                <div class="filter-group">
 
-                    <table class="film-table">
+                    <p class="filter-group-header">Рейтинг</p>
 
-                        <tr>
+                    <div class="text-and-input">
 
-                            <td class="film-cover-cell">
+                        <p class="input-text">От:</p>
+                        <input class="input" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="minScore" />
+                    
+                    </div>
 
-                                <img v-bind:src="film.coverUrl" class="film-cover" v-on:click="goToMoreFilmInfo(film.id)"></img>
+                    <div class="text-and-input">
 
-                            </td>
+                        <p class="input-text">До:</p>
+                        <input class="input" type="number" v-on:beforeInput="tryEnterNumber($event)" v-model="maxScore" />
 
-                            <td class="film-name-cell">
-                            <u><p class="film-name" v-on:click="goToMoreFilmInfo(film.id)">{{ film.name }}</p></u>
-                                <p class="film-info">{{ film.year }} г. | {{ film.duration }} мин.</p>
-                                <p class="film-score">{{ film.rating }} / 5</p>
-                            </td>
+                    </div>
 
-                            <td class="film-genre-cell">
-                                <div class="film-info-list">
+                </div>
 
-                                    <p class="film-info" v-for="genre in film.genres">{{ genre }}</p>
+                <div class="filter-group">
 
+                    <p class="filter-group-header">Жанр</p>
+
+                    <div class="genre-container">
+
+                        <label class="genre-entry" v-for="genre in genres">
+
+                            <input class="genre-checkbox" type="checkbox" v-on:change="checkGenre($event, genre)" />
+                            <span class="checkmark"></span>
+                            <p class="genre-name">{{ genre }}</p>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <button class="update-button" v-on:click="updateLibrary(1)">Обновить</button>
+
+            </div>
+
+            <div class="library-container" v-show="library.length > 0">
+
+                <div class="user-info-container" v-show="showUserInfo == true">
+
+                    <button class="close-button" v-on:click="showUserInfo = false"><i class="fa-solid fa-x"></i></button>
+
+                    <template v-if="userName != ''">
+
+                        <p class="user-name">Вы зашли под именем</p>
+                        <p class="user-name">{{ userName }}</p>
+                        <button class="login-button" v-on:click="logOut()">Выйти</button>
+
+                    </template>
+
+                    <template v-if="userName == ''">
+
+                        <p class="user-name">Вы не авторизованы</p>
+                        <button class="login-button" v-on:click="goLogin()">Войти</button>
+
+                    </template>
+
+                </div>
+
+                <div class="library-counter-container">
+
+                    <span class="library-counter">Фильмы&nbsp;{{ library.length }}</span>
+
+                </div>
+
+                <div class="paging-buttons-container" v-if="totalPages > 1">
+
+                    <button class="paging-button" v-bind:disabled="currentPage <= 1" v-on:click="updateLibrary(1)">&lt&lt</button>
+                    <button class="paging-button" v-bind:disabled="currentPage <= 1" v-on:click="updateLibrary(currentPage - 1)">&lt</button>
+                    <button class="paging-button" v-for="page in createRange(Math.max(Math.min(currentPage + 2, totalPages) - 5, 1), Math.min(Math.max(currentPage - 2, 1) + 5, totalPages), 1)" v-on:click="updateLibrary(page)" v-bind:class="{ 'inactive-paging-button': page == currentPage }" v-bind:disabled="page == currentPage">{{ page }}</button>
+                    <button class="paging-button" v-bind:disabled="currentPage >= totalPages" v-on:click="updateLibrary(currentPage + 1)">&gt</button>
+                    <button class="paging-button" v-bind:disabled="currentPage >= totalPages" v-on:click="updateLibrary(totalPages)">&gt&gt</button>
+
+                </div>
+
+                <div class="films-container">
+
+                    <div class="library-entry" v-for="film in library">
+
+                        <div class="image-with-button">
+
+                            <img class="film-cover" v-bind:src="film.coverUrl" width="200" height="300"></img>
+
+                            <div class="film-cover-ontop">
+
+                                <div class="film-info-container"><p class="film-info">{{ film.year }} г. | {{ film.duration }} мин.</p></div>
+                                
+                                <div class="film-info-container" v-show="film.rating > 0"><p class="film-info">{{ film.rating }} / 5</p></div>
+                                
+                                <div class="film-info-container" v-show="film.rating == 0"><p class="film-info">Оценок нет</p></div>
+                                
+                                <div class="film-info-container">
+                                    <p class="film-info" v-for="country in film.countries">{{ country}} &nbsp</p>
                                 </div>
-                            </td>
 
-                            <td class="film-director-cell">
-                                <div class="film-info-list">
-
-                                    <p class="film-info" v-for="director in film.directors">{{ director }}</p>
-
-                                </div>
-                            </td>
-
-                            <td class="film-country-cell">
-                                <div class="film-info-list">
-
-                                    <p class="film-info" v-for="country in film.countries">{{ country }}</p>
-
-                                </div>
-                            </td>
-
-                            <td class="film-user-score-cell" v-if="userName != ''">
-                                <div>
-
+                                <div class="user-rating-section" v-if="userName != ''">
                                     <span class="fa fa-star" v-bind:class="{ 'selected-star': film.visualRating >= 1 }" v-on:mouseover="film.visualRating = 1" v-on:mouseleave="film.visualRating = film.currentUserRating" v-on:click="film.currentUserRating = 1; updateUserScore(film.id, 1)"></span>
                                     <span class="fa fa-star" v-bind:class="{ 'selected-star': film.visualRating >= 2 }" v-on:mouseover="film.visualRating = 2" v-on:mouseleave="film.visualRating = film.currentUserRating" v-on:click="film.currentUserRating = 2; updateUserScore(film.id, 2)"></span>
                                     <span class="fa fa-star" v-bind:class="{ 'selected-star': film.visualRating >= 3 }" v-on:mouseover="film.visualRating = 3" v-on:mouseleave="film.visualRating = film.currentUserRating" v-on:click="film.currentUserRating = 3; updateUserScore(film.id, 3)"></span>
                                     <span class="fa fa-star" v-bind:class="{ 'selected-star': film.visualRating >= 4 }" v-on:mouseover="film.visualRating = 4" v-on:mouseleave="film.visualRating = film.currentUserRating" v-on:click="film.currentUserRating = 4; updateUserScore(film.id, 4)"></span>
                                     <span class="fa fa-star" v-bind:class="{ 'selected-star': film.visualRating >= 5 }" v-on:mouseover="film.visualRating = 5" v-on:mouseleave="film.visualRating = film.currentUserRating" v-on:click="film.currentUserRating = 5; updateUserScore(film.id, 5)"></span>
-
                                 </div>
-                            </td>
 
-                        </tr>
+                                <div class="image-button-container">
+                                    <button class="image-button" v-on:click="goToMoreFilmInfo(film.id)">Подробнее</button>
+                                </div>
 
-                    </table>
+                            </div>
+
+                        </div>
+
+                        <p class="film-name">{{ film.name }}</p>
+
+                    </div>
 
                 </div>
-
-                <p class="empty-search-result-message" v-show="library.length == 0 && loading == 0">По вашему запросу ничего не найдено</p>
-                <div class="loader" v-show="loading > 0"></div>
 
                 <div class="paging-buttons-container" v-if="totalPages > 1">
 
-                    <button class="paging-button" v-bind:disabled="currentPage <= 1" v-on:click="updateLibrary(currentPage + 1)">&lt</button>
+                    <button class="paging-button" v-bind:disabled="currentPage <= 1" v-on:click="updateLibrary(1)">&lt&lt</button>
+                    <button class="paging-button" v-bind:disabled="currentPage <= 1" v-on:click="updateLibrary(currentPage - 1)">&lt</button>
                     <button class="paging-button" v-for="page in createRange(Math.max(Math.min(currentPage + 2, totalPages) - 5, 1), Math.min(Math.max(currentPage - 2, 1) + 5, totalPages), 1)" v-on:click="updateLibrary(page)" v-bind:class="{ 'inactive-paging-button': page == currentPage }" v-bind:disabled="page == currentPage">{{ page }}</button>
                     <button class="paging-button" v-bind:disabled="currentPage >= totalPages" v-on:click="updateLibrary(currentPage + 1)">&gt</button>
+                    <button class="paging-button" v-bind:disabled="currentPage >= totalPages" v-on:click="updateLibrary(totalPages)">&gt&gt</button>
 
                 </div>
 
             </div>
 
-            <div class="user-container" v-if="userName != ''">
+            <p class="no-result-message" v-show="library.length < 1 && loading < 1">По вашему запросу ничего не найдено</p>
 
-                <p class="basic-text">Вы зашли под именем:</p>
-                <p><u class="user-name">{{ userName }}</u></p>
-                <button class="button" v-on:click="logOut()">Выход</button>
+        </div>
 
+        <div class="loader-1" v-show="loading > 0">
+            <div class="loader-2">
+                <div class="loader"></div>
             </div>
-
-            <div class="user-container" v-if="userName == ''">
-
-                <p class="basic-text">Вы не авторизованы</p>
-                <button class="button" v-on:click="goLogin()">Войти</button>
-
-            </div>
-
         </div>
 
     </div>
@@ -203,3 +237,5 @@
     <script src="~/js/library.js"></script>
 
 </body>
+
+</html>

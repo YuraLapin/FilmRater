@@ -14,6 +14,7 @@ const Library = {
             currentPage: 1,
             totalPages: "",
             loading: 0,
+            showUserInfo: false,
         }
     },
     methods: {
@@ -64,7 +65,7 @@ const Library = {
                     vm.library = result
                     vm.library.forEach((film) => {
                         film.visualRating = film.currentUserRating
-                        film.coverUrl = "../images/covers/" + film.id + "_small.webp"
+                        film.coverUrl = "../images/covers/" + film.id + "_full.webp"
                     })
                     vm.currentPage = page
                 }
