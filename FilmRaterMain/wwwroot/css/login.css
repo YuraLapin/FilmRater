@@ -1,64 +1,178 @@
 * {
     box-sizing: border-box;
     font-family: Noto Sans, sans-serif;
+    color: rgb(210, 210, 210);
     font-size: 16px;
     margin: 0;
     padding: 0;
+    scrollbar-color: rgb(107, 107, 107) rgb(45, 45, 45);
+    scrollbar-width: thin;
+}
+
+html {
 }
 
 body {
     display: flex;
     justify-content: center;
+    background-color: rgb(15, 15, 15);
+}
+
+.blur-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(100px);
+    display: flex;
+    justify-content: center;
+    background-color: rgba(15, 15, 15, 0.25);
+    z-index: 2 !important;
+}
+
+button {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    background-color: rgb(35, 35, 35);
+    border: 0;
+}
+
+    button:hover {
+        cursor: pointer;
+        background-color: rgb(45, 45, 45);
+    }
+
+    button:disabled {
+        background-color: rgb(25, 25, 25);
+    }
+
+        button:disabled:hover {
+            background-color: rgb(25, 25, 25);
+            cursor: auto;
+        }
+
+input[type="text"],
+input[type="number"],
+input[type="password"] {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    background-color: rgb(35, 35, 35);
+    border: 0;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus {
+    background-color: rgb(45, 45, 45);
+    outline: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
 }
 
 .main-container {
-    width: 400px;
-    margin-top: 10%;
-    box-shadow: 0 0 0 2px white, 0.3em 0.3em 1em rgb(0 0 0 / 60%);
+    width: 350px;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.4);
+    margin-top: 300px;
+    z-index: 3 !important;
+    height: auto;
 }
 
 .log-in-register-form {
-    display: block;
-    align-content: center;
-    padding-bottom: 3%;
+    display: grid;
+    margin: 5px;
 }
 
 .error-message {
-    width: 80%;
     text-align: center;
     word-wrap: break-word;
-    margin-top: 3%;
-    margin-left: 10%;
-    padding-left: 1%;
-    background: #ff7171;
-    padding: 1%;
+    background-color: rgba(216, 66, 66, 0.7);
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.log-in-register-form div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 5px;
 }
 
 .textbox {
-    width: 80%;
-    margin-left: 10%;
-    margin-top: 3%;
+    width: 300px;
     height: 40px;
     font-size: 20px;
-    padding-left: 1%;
-    border-color: grey;
-    border-radius: 4px;
+    padding-left: 10px;
+    padding-right: 5px;
 }
 
 .button {
-    width: 60%;
-    margin-left: 20%;
-    margin-top: 3%;
+    width: 175px;
     height: 40px;
+    padding: 5px;
     border-radius: 5px;
-    border-color: grey;
 }
 
 .switch-button {
-    width: 60%;
-    margin-left: 20%;
-    margin-top: 3%;
     height: 60px;
-    border-radius: 5px;
-    border-color: grey;
+}
+
+.background-image-1 {
+    position: absolute;
+    top: 320px;
+    display: flex;
+    justify-content: center;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    background-color: rgb(15, 15, 15);
+    border-radius: 50%;
+    box-shadow: 10px 10px 0 0 red;
+}
+
+.background-image {
+    position: absolute;
+    top: 200px;
+    display: flex;
+    justify-content: center;
+    --p: 70px; /* control the shape (can be percentage) */
+    height: 500px;
+    aspect-ratio: 1;
+    clip-path: polygon(0 0, 100% var(--p), 100% 100%, 0 100%);
+    animation: coloranimation 120s infinite;
+    border-radius: 20%;
+    z-index: 1 !important;
+}
+
+@keyframes coloranimation {
+    0% {
+        background: rgb(128, 64, 255);
+    }
+    25% {
+        background: rgb(122, 111, 225);
+    }
+    50% {
+        background: rgb(103, 254, 134);
+    }
+    75% {
+        background: rgb(109, 206, 164);
+    }
+    100% {
+        background: rgb(128, 64, 255);
+    }
 }

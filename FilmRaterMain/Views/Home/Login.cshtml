@@ -15,29 +15,73 @@
 
 <body>
 
+    <div class="background-image"></div>
+
+    <div class="blur-frame"></div>
+
     <div class="main-container" id="authentication-form">
 
         <div class="log-in-register-form" v-show="regMode == false">
 
-            <input class="textbox" type="text" placeholder="Логин" v-model="login" />
-            <input class="textbox" type="password" placeholder="Пароль" v-model="password" />
-            <button class="button" v-on:click="tryLogIn()">Войти</button>
-            <button class="switch-button" v-on:click="regMode = true">Нет аккаунта? Зарегестрироваться</button>
-            <p class="error-message" v-show="logInError == true">Неверные логин/пароль</p>
-        <p class="error-message" v-show="logInErrorFill == true">Заполните все поля</p>
+            <div>
+                <input class="textbox" type="text" placeholder="Логин" v-model="login" />
+            </div>
+
+            <div>
+                <input class="textbox" type="password" placeholder="Пароль" v-model="password" />
+            </div>
+
+            <div>
+                <button class="button" v-on:click="tryLogIn()">Войти</button>
+            </div>
+
+            <div>
+                <button class="button switch-button" v-on:click="regMode = true">Нет аккаунта? Зарегестрироваться</button>
+            </div>
+
+            <div>
+                <p class="error-message" v-show="logInError == true">Неверные логин/пароль</p>
+            </div>
+
+            <div>
+                <p class="error-message" v-show="logInErrorFill == true">Заполните все поля</p>
+            </div>
 
         </div>
 
         <div class="log-in-register-form" v-show="regMode == true">
 
-            <input class="textbox" type="text" placeholder="Логин" v-model="loginRegister" />
-            <input class="textbox" type="password" placeholder="Пароль" v-model="password1" />
-            <input class="textbox" type="password" placeholder="Подтвердите пароль" v-model="password2" />
-            <button class="button" v-on:click="tryRegister()">Зарегестрироваться</button>
-            <button class="switch-button" v-on:click="regMode = false">Есть акаунт? Войти</button>
-            <p class="error-message" v-show="regErrorPassword == true">Пароли не совпадают</p>
-            <p class="error-message" v-show="regErrorTaken == true">Пользователь с таким именем уже существует</p>
-            <p class="error-message" v-show="regErrorFill == true">Заполните все поля</p>
+            <div>
+                <input class="textbox" type="text" placeholder="Логин" v-model="loginRegister" />
+            </div>
+
+            <div>
+                <input class="textbox" type="password" placeholder="Пароль" v-model="password1" />
+            </div>
+
+            <div>
+                <input class="textbox" type="password" placeholder="Подтвердите пароль" v-model="password2" />
+            </div>
+
+            <div>
+                <button class="button" v-on:click="tryRegister()">Зарегестрироваться</button>
+            </div>
+
+            <div>
+                <button class="button switch-button" v-on:click="regMode = false">Есть акаунт? Войти</button>
+            </div>
+
+            <div>
+                <p class="error-message" v-show="regErrorPassword == true">Пароли не совпадают</p>
+            </div>
+
+            <div>
+                <p class="error-message" v-show="regErrorTaken == true">Пользователь с таким именем уже существует</p>
+            </div>
+
+            <div>
+                <p class="error-message" v-show="regErrorFill == true">Заполните все поля</p>
+            </div>
 
         </div>
 
