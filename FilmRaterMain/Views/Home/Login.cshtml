@@ -39,12 +39,12 @@
                 <button class="button switch-button" v-on:click="regMode = true">Нет аккаунта? Зарегестрироваться</button>
             </div>
 
-            <div>
-                <p class="error-message" v-show="logInError == true">Неверные логин/пароль</p>
+            <div v-if="logInError == true">
+                <p class="error-message">Неверные логин/пароль</p>
             </div>
 
-            <div>
-                <p class="error-message" v-show="logInErrorFill == true">Заполните все поля</p>
+            <div v-if="logInErrorFill == true">
+                <p class="error-message">Заполните все поля</p>
             </div>
 
         </div>
@@ -71,16 +71,40 @@
                 <button class="button switch-button" v-on:click="regMode = false">Есть акаунт? Войти</button>
             </div>
 
-            <div>
-                <p class="error-message" v-show="regErrorPassword == true">Пароли не совпадают</p>
+            <div v-if="regErrorPassword == true">
+                <p class="error-message">Пароли не совпадают</p>
             </div>
 
-            <div>
-                <p class="error-message" v-show="regErrorTaken == true">Пользователь с таким именем уже существует</p>
+            <div v-if="regErrorTaken == true">
+                <p class="error-message">Пользователь с таким именем уже существует</p>
             </div>
 
-            <div>
-                <p class="error-message" v-show="regErrorFill == true">Заполните все поля</p>
+            <div v-if="regErrorFill == true">
+                <p class="error-message">Заполните все поля</p>
+            </div>
+
+            <div v-if="regErrorLoginTooLong == true">
+                <p class="error-message">Длина логина не должна превышать 12 символов</p>
+            </div>
+
+            <div v-if="regErrorPasswordTooLong == true">
+                <p class="error-message">Длина пароля не должна превышать 12 символов</p>
+            </div>
+
+            <div v-if="regErrorLoginTooShort == true">
+                <p class="error-message">Минимальная длина логина 5 символов</p>
+            </div>
+
+            <div v-if="regErrorPasswordTooShort == true">
+                <p class="error-message">Минимальная длина пароля 5 символов</p>
+            </div>
+
+            <div v-if="regErrorLoginSymbols == true">
+                <p class="error-message">В логине разрешены только цифры, заглавные и строчные латинские буквы, а также символы "_" и "-"</p>
+            </div>
+
+            <div v-if="regErrorPasswordSymbols == true">
+                <p class="error-message">В пароле разрешены только цифры, заглавные и строчные латинские буквы, а также символы "_" и "-"</p>
             </div>
 
         </div>
