@@ -147,15 +147,13 @@ input[type=number] {
 
 .background-image {
     position: absolute;
-    top: 200px;
+    top: 170px;
     display: flex;
     justify-content: center;
-    --p: 70px; /* control the shape (can be percentage) */
     height: 500px;
     aspect-ratio: 1;
-    clip-path: polygon(0 0, 100% var(--p), 100% 100%, 0 100%);
     animation: coloranimation 120s infinite;
-    border-radius: 20%;
+    border-radius: 50%;
     z-index: 1 !important;
 }
 
