@@ -6,6 +6,8 @@
             filmData: "",
             comments: [],
             loading: 0,
+            showUserInfo: false,
+            newComment: "",
         }
     },
     methods: {
@@ -57,7 +59,6 @@
             })
         },
         async sendComment() {
-            let text = document.getElementById("comment-textarea").value
             await $.ajax({
                 url: "api/requests/UploadComment",
                 method: "POST",
@@ -66,15 +67,15 @@
                 data: JSON.stringify({
                     "filmId": vm.filmId,
                     "userName": vm.userName,
-                    "text": text,
+                    "text": newComment,
                 }),
                 success: function (result) {
                     vm.comments.unshift({
                         "userName": vm.userName,
-                        "text": text,
+                        "text": newComment,
                         "userScore": vm.filmData.currentUserRating
                     })
-                    document.getElementById("comment-textarea").value = ""
+                    newComment = ""
                 },
             })
         },

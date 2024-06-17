@@ -1,264 +1,359 @@
 ﻿* {
     box-sizing: border-box;
     font-family: Noto Sans, sans-serif;
+    color: rgb(210, 210, 210);
     font-size: 16px;
     margin: 0;
     padding: 0;
+    scrollbar-color: rgb(107, 107, 107) rgb(45, 45, 45);
+    scrollbar-width: thin;
 }
 
 body {
+    background-color: rgb(15, 15, 15);
+}
+
+button {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    background-color: rgb(35, 35, 35);
+    border: 0;
+}
+
+    button:hover {
+        cursor: pointer;
+        background-color: rgb(45, 45, 45);
+    }
+
+    button:disabled {
+        background-color: rgb(25, 25, 25);
+    }
+
+        button:disabled:hover {
+            background-color: rgb(25, 25, 25);
+            cursor: auto;
+        }
+
+input[type="text"],
+input[type="number"],
+input[type="password"],
+textarea {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    background-color: rgb(35, 35, 35);
+}
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="password"]:focus,
+    textarea:focus {
+        background-color: rgb(45, 45, 45);
+        outline: none;
+    }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
+
+.outer-container {
+    display: grid;
+    width: 100%;
+}
+
+.nav-bar {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 2 !important;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.nav-bar-back-button-container {
+    width: 350px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.back-button {
+    position: absolute;
+    top: 25px;
+    width: 50px;
+    height: 50px;
+}
+
+.nav-bar-header-container {
+    width: 900px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.nav-bar-header {
+    margin-left: 15px;
+    font-size: 40px;
+}
+
+.nav-bar-user-container {
+    margin-left: 10px;
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.user-button {
+    width: 50px;
+    height: 50px;
+}
+
+
+
+.main-part-container {
     display: flex;
     justify-content: center;
 }
 
-.button {
-    width: 50%;
-    height: 30px;
-    border-radius: 5px;
-    border-color: grey;
-    margin-left: 5%;
-    margin-top: 5%;
-    margin-bottom: 5%;
-}
-
-.button:hover {
-    cursor: pointer;
-}
-
-.outer-outer-container {
-    width: 1500px;
-    display: flex;
-}
-
-.back-button-container {
-    width: 10%;
-    display: flex;
-    margin-top: 2%;
-}
-
-.back-button {
-    width: 50px;
-    height: 50px;
-    border-radius: 0px;
-    position: sticky;
-    left: 900px;
-    margin-right: 1%;
-}
-
-.back-button:hover {
-    cursor: pointer;
-}
-
-.outer-container {
+.film-page-container {
     width: 1200px;
-    display: block;
-    box-shadow: 0 0 0 2px white, 0.3em 0.3em 1em rgb(0 0 0 / 60%);
-    min-height: 800px;
-    margin-top: 2%;
+    display: grid;
+    background-color: rgb(35, 35, 35);
 }
 
-.user-container {
-    width: 10%;
-    display: block;
-    margin-top: 2%;
-    padding: 1%;
-}
-
-.basic-text {
-    margin-left: 5%;
-    margin-top: -1%;
-    margin-bottom: -1%;
-}
-
-.user-name {
-    color: #005;
-    font-size: 18px;
-    margin-left: 5%;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.info-and-cover {
+.film-cover-and-info {
     display: flex;
+    margin-right: 50px;
 }
 
-.cover-container {
-    display: block;
-    width: 30%;
-    margin: 2%;
+.film-cover {
+    margin: 10px;
+    margin-left: 20px;
+    margin-top: 20px;
 }
 
 .film-info-container {
+    display: grid;
+    margin: 10px;
+}
+
+.user-score-container {
+    margin: 5px;
+    font-size: 30px;
+}
+
+
+
+.user-info-container {
+    width: 300px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    backdrop-filter: blur(20px);
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 3 !important;
     display: block;
-    width: 70%;
-    margin-top: 2%;
+    text-align: center;
+    border-radius: 10px;
 }
 
-.film-name {
-    font-family: tahoma, verdana, arial;
-    font-size: 30px;
-    color: #f60;
-    margin-top: 2%;
-    margin-bottom: 2%;
+.user-name {
+    font-size: 20px;
+    margin-top: 20px;
 }
 
-.film-name-blue {
-    font-family: tahoma, verdana, arial;
-    font-size: 30px;
-    color: #005;
-    margin-top: 2%;
-    margin-bottom: 2%;
+.login-button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    width: 100px;
+    height: 40px;
+    border: 0;
 }
 
-    .film-name-blue:hover {
-        cursor: pointer;
-    }
+.close-button {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 25px;
+    height: 25px;
+    border-radius: 3px;
+    border: 0;
+}
 
-.film-table {
+
+
+.film-info-table {
     width: 100%;
-}
-
-.film-table, tr {
+    height: 100%;
     border-collapse: collapse;
 }
 
+    .film-info-table tr {
+        border-bottom: solid 1px rgb(150, 150, 150);
+        height: 14%;
+    }
+
+    .film-info-table tr:last-child {
+        border-bottom: none;
+    }
+
 .header-cell {
-    width: 30%;
+    width: 300px;
 }
 
 .table-header {
     text-align: start;
-    color: #999;
-    margin: 2%;
+    color: rgb(190, 190, 190);
+    margin: 5px;
 }
 
 .info-cell {
-    width: 70%;
+    width: 600px;
 }
 
 .table-info {
     text-align: start;
-    margin: 2%;
+    margin: 5px;
 }
 
 .rating {
     text-align: start;
-    margin: 2%;
-    color: #f60;
+    font-size: 22px;
+    margin: 5px;
 }
 
-.film-synopsis-container {
-    width: 100%;
+
+
+.synopsis-container {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    margin-right: 50px;
+    text-align: justify;
+}
+
+.synopsis {
+    font-size: 18px;
+}
+
+
+
+.film-rating-container {
+    margin-left: 20px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-size: 30px;
+}
+
+.rating-header {
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 
 .selected-star {
     color: orange;
 }
 
-.synopsis {
-    font-size: 18px;
-    margin: 2%;
+
+
+.comments-container {
+    display: flex;
+    width: 100%;
 }
 
-.loader {
-    border: 16px solid #f3f3f3;
-    border-top: 16px solid #3498db;
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    animation: spin 2s linear infinite;
-    margin: 40% 0 5% 560px;
+.new-comment-part {
+    width: 45%;
+    display: flex;
+    justify-content: center;
 }
 
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
+.new-comment-container {
+    height: 300px;
+    width: 520px;
+    display: block;
+    background-color: rgb(15, 15, 15, 0.3);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
 }
 
-.synopsis {
-    font-size: 16px;
+.new-comment-user-name {
+    width: 450px;
+    margin: 10px;
 }
 
-.film-rating-container {
-    margin: 2%;
-    font-size: 30px;
+.new-comment-textarea {
+    padding: 5px;
+    width: 500px;
+    height: 200px;
+    border: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    resize: none;
 }
 
-.rating-header {
-    font-size: 22px;
+.center-vert {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .comment-list-container {
-    margin: 2%;
-    border: 1px solid black ;
-}
-
-.comment-write-container {
-    margin: 2%;
+    width: 55%;
     display: grid;
 }
 
-.comment-container-header {
-    margin-bottom: 2%;
+.header {
+    font-size: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
-.comment-textarea {
-    width: 500px;
-    height: 200px;
-    margin-top: 1%;
-    margin-bottom: 1%;
-    border-radius: 7px;
-    resize: none;
-    padding: 1%;
-}
-
-.comment-send-button {
-    width: 200px;
-    height: 40px;
-    border-radius: 7px;
-}
-
-.comment-send-button:hover {
-    cursor: pointer;
+.send-button {
+    margin: 10px;
+    width: 100px;
+    height: 30px;
 }
 
 .comment-container {
-    border: 1px solid black;
-    margin: 2%;
-    border-radius: 7px;
-}
-
-.comment-container-header {
-    margin-left: 2%;
-    margin-top: 1%;
+    width: 550px;
+    margin-bottom: 10px;
+    display: block;
+    background-color: rgb(15, 15, 15, 0.3);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
 }
 
 .comment-user-name {
-    margin-top: 1%;
-    margin-left: 1%;
-    font-size: 18px;
-    color: #005;
+    margin: 10px;
+    font-size: 20px;
 }
 
 .my-comment-user-name {
-    margin-top: 1%;
-    margin-left: 1%;
-    font-size: 18px;
-    color: #f60;
+    color: rgb(255, 47, 47);
 }
 
 .comment-rating-container {
-    margin-top: 1%;
-    margin-left: 1%;
+     margin: 10px;
 }
 
 .comment {
-    margin-top: 1%;
-    margin-left: 1%;
-    margin-bottom: 1%;
+    margin: 10px;
 }

@@ -56,7 +56,7 @@ namespace FilmRaterMain.Controllers
         {
             if (await databaseRequestService.UserNameIsFree(userName))
             {
-                return View("LogIn", new LoginModel() { ErrorType = "WrongCridentialsError" });
+                return View("LogIn", new LoginModel() { ErrorType = "WrongCridentialsError", CameFrom = cameFrom, FilmId = filmId });
             }
 
             string storedHash = await databaseRequestService.GetStoredHash(userName);
@@ -78,7 +78,7 @@ namespace FilmRaterMain.Controllers
 
             }
 
-            return View("LogIn", new LoginModel() { ErrorType = "WrongCridentialsError" });
+            return View("LogIn", new LoginModel() { ErrorType = "WrongCridentialsError", CameFrom = cameFrom, FilmId = filmId });
         }
 
         [HttpPost("Home/TryRegister")]
@@ -101,7 +101,7 @@ namespace FilmRaterMain.Controllers
                 }
             }
 
-            return View("LogIn", new LoginModel() { ErrorType = "LoginTakenError" });
+            return View("LogIn", new LoginModel() { ErrorType = "LoginTakenError", CameFrom = cameFrom, FilmId = filmId });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
