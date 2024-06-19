@@ -81,6 +81,17 @@ namespace FilmRaterMain.Controllers
             return View("LogIn", new LoginModel() { ErrorType = "WrongCridentialsError", CameFrom = cameFrom, FilmId = filmId });
         }
 
+        [HttpPost("Home/GoBack")]
+        public async Task<IActionResult> GoBack(string cameFrom, int filmId)
+        {
+            if (cameFrom == "MoreInfo" && filmId != 0)
+            {
+                return View("MoreInfo", new MoreInfoModel() { UserName = "", FilmId = filmId });
+            }
+
+            return View("Library", new LibraryModel() { UserName = "" });
+        }
+
         [HttpPost("Home/TryRegister")]
         public async Task<IActionResult> TryRegister(string userName, string password, string cameFrom, int filmId)
         {

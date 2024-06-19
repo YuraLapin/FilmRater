@@ -111,7 +111,25 @@
             $("#input-register-camefrom").val(cameFrom)
             $("#input-register-filmid").val(passedFilmId)
             $("#try-register-form").submit()
-        }
+        },
+        goBack() {
+            vm.logInError = false
+            vm.logInErrorFill = false
+
+            vm.regErrorPassword = false
+            vm.regErrorTaken = false
+            vm.regErrorFill = false
+            vm.regErrorLoginTooLong = false
+            vm.regErrorPasswordTooLong = false
+            vm.regErrorLoginTooShort = false
+            vm.regErrorPasswordTooShort = false
+            vm.regErrorLoginSymbols = false
+            vm.regErrorPasswordSymbols = false
+
+            $("#input-goback-camefrom").val(cameFrom)
+            $("#input-goback-filmid").val(passedFilmId)
+            $("#goback-form").submit()
+        },
     }
 }
 

@@ -11,6 +11,10 @@
 
     <link rel="stylesheet" href="~/css/logIn.css" asp-append-version="true" />
 
+    <script src="https://kit.fontawesome.com/9d04c2dd40.js" crossorigin="anonymous"></script>
+
+    <title>Вход</title>
+
 </head>
 
 <body>
@@ -20,6 +24,12 @@
     <div class="blur-frame"></div>
 
     <div class="main-container" id="authentication-form">
+
+        <div class="back-button-container">
+
+            <button class="back-button" v-on:click="goBack()"><i class="fa-solid fa-x"></i></button>
+
+        </div>
 
         <div class="log-in-register-form" v-show="regMode == false">
 
@@ -121,6 +131,11 @@
             <input id="input-register-password" name="password" />
             <input id="input-register-camefrom" name="cameFrom" />
             <input id="input-register-filmid" name="filmId" />
+        </form>
+
+        <form method="post" id="goback-form" style="display:none" action="~/Home/GoBack">
+            <input id="input-goback-camefrom" name="cameFrom" />
+            <input id="input-goback-filmid" name="filmId" />
         </form>
 
     </div>

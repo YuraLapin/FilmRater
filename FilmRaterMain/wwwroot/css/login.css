@@ -90,6 +90,7 @@ input[type=number] {
     margin-top: 300px;
     z-index: 3 !important;
     height: auto;
+    padding-bottom: 10px;
 }
 
 .log-in-register-form {
@@ -173,4 +174,19 @@ input[type=number] {
     100% {
         background: rgb(128, 64, 255);
     }
+}
+
+.back-button-container {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.back-button {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 5px;
+    color: rgb(210, 210, 210);
 }
