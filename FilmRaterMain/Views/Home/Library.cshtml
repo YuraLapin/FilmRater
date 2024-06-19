@@ -115,26 +115,31 @@
 
             <div class="library-container" v-show="library.length > 0">
 
-                <div class="user-info-container" v-show="showUserInfo == true">
+                <transition name="opacity-animation">
 
-                    <button class="close-button" v-on:click="showUserInfo = false"><i class="fa-solid fa-x"></i></button>
+                    <div class="user-info-container" v-show="showUserInfo == true">
 
-                    <template v-if="userName != ''">
+                        <button class="close-button" v-on:click="showUserInfo = false"><i class="fa-solid fa-x"></i></button>
 
-                        <p class="user-name">Вы зашли под именем</p>
-                        <p class="user-name">{{ userName }}</p>
-                        <button class="login-button" v-on:click="logOut()">Выйти</button>
+                        <template v-if="userName != ''">
 
-                    </template>
+                            <p class="user-name">Вы зашли под именем</p>
+                            <p class="user-name">{{ userName }}</p>
+                            <button class="login-button" v-on:click="logOut()">Выйти</button>
 
-                    <template v-if="userName == ''">
+                        </template>
 
-                        <p class="user-name">Вы не авторизованы</p>
-                        <button class="login-button" v-on:click="goLogin()">Войти</button>
+                        <template v-if="userName == ''">
 
-                    </template>
+                            <p class="user-name">Вы не авторизованы</p>
+                            <button class="login-button" v-on:click="goLogin()">Войти</button>
 
-                </div>
+                        </template>
+
+                    </div>
+
+                </transition>
+
 
                 <div class="library-counter-container">
 

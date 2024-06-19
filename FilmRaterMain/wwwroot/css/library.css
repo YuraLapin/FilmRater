@@ -456,6 +456,7 @@ input[type=number] {
     height: 30px;
     margin-left: 10px;
     margin-bottom: 10px;
+    border-radius: 5px;
 }
 
 .no-result-message {
@@ -488,4 +489,23 @@ input[type="checkbox"] {
 
 .genre-entry input:checked ~ .checkmark {
     background-color: white;
+}
+
+
+
+.opacity-animation-enter-active {
+    animation: opacity-in 0.25s ease;
+}
+
+.opacity-animation-leave-active {
+    animation: opacity-in 0.125s reverse ease;
+}
+
+@keyframes opacity-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100%;
+    }
 }
