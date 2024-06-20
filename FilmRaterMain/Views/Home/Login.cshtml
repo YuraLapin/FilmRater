@@ -1,6 +1,4 @@
-﻿@model LoginModel
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <head>
 
@@ -122,15 +120,11 @@
         <form method="post" id="try-login-form" style="display:none" action="~/Home/TryLogIn">
             <input id="input-login-username" name="userName" />
             <input id="input-login-password" name="password" />
-            <input id="input-login-camefrom" name="cameFrom" />
-            <input id="input-login-filmid" name="filmId" />
         </form>
 
         <form method="post" id="try-register-form" style="display:none" action="~/Home/TryRegister">
             <input id="input-register-username" name="userName" />
             <input id="input-register-password" name="password" />
-            <input id="input-register-camefrom" name="cameFrom" />
-            <input id="input-register-filmid" name="filmId" />
         </form>
 
         <form method="post" id="goback-form" style="display:none" action="~/Home/GoBack">
@@ -138,28 +132,9 @@
             <input id="input-goback-filmid" name="filmId" />
         </form>
 
+        <form method="post" id="go-library-form" style="display: none" action="~/Home/Library"></form>
+
     </div>
-
-    <script>
-
-        var cameFrom = '@Model.CameFrom'
-        var passedError = '@Model.ErrorType'
-        var passedFilmId = '@Model.FilmId'
-
-        var showRegistration = false
-        var loginTakenError = false
-        var wrongCridentialsError = false
-
-        if (passedError == 'LoginTakenError') {
-            showRegistration = true
-            loginTakenError = true
-        }
-
-        else if (passedError == 'WrongCridentialsError') {
-            wrongCridentialsError = true
-        }
-
-    </script>
 
     <script src="~/js/login.js"></script>
 

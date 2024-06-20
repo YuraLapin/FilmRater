@@ -1,6 +1,4 @@
-﻿@model LibraryModel
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="ru">
 
@@ -176,7 +174,7 @@
                                 <div class="film-info-container" v-show="film.rating == 0"><p class="film-info">Оценок нет</p></div>
                                 
                                 <div class="film-info-container">
-                                    <p class="film-info" v-for="country in film.countries">{{ country}} &nbsp</p>
+                                    <p class="film-info" v-for="country in film.countries">{{ country }} &nbsp</p>
                                 </div>
 
                                 <div class="user-rating-section" v-if="userName != ''">
@@ -188,7 +186,7 @@
                                 </div>
 
                                 <div class="image-button-container">
-                                    <button class="image-button" v-on:click="goToMoreFilmInfo(film.id)">Подробнее</button>
+                                    <button class="image-button" v-on:click="goMoreInfo(film.id)">Подробнее</button>
                                 </div>
 
                             </div>
@@ -225,21 +223,12 @@
 
     </div>
 
-    <form method="post" id="throw-to-login-form" style="display:none" action="~/Home/Login">
-        <input id="input-login-camefrom" name="cameFrom" />
-        <input id="input-login-filmid" name="filmId" />
+    <form method="post" id="go-to-login-form" style="display:none" action="~/Home/Login">
     </form>
 
-    <form method="post" id="throw-to-more-info" style="display:none" action="/Home/MoreInfo">
-        <input id="hidden-form-input-user-name" name="userName" />
-        <input id="hidden-form-input-film-id" name="filmId" />
+    <form method="post" id="go-to-more-info" style="display:none" action="~/Home/MoreInfo">
+        <input id="hidden-form-input-film-id" name="id"></input>
     </form>
-
-    <script>
-
-        var passedUserName = '@Model.UserName'
-
-    </script>
 
     <script src="~/js/library.js"></script>
 

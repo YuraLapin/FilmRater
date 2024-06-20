@@ -4,7 +4,6 @@ namespace FilmRaterMain.Models
 {
     public class LibraryModel
     {
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        public string UserName { get; set; }
+        public bool UserLogged { get; set; }
     }
 }

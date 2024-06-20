@@ -6,11 +6,11 @@
             loginRegister: "",
             password1: "",
             password2: "",
-            regMode: showRegistration,
-            logInError: wrongCridentialsError,
+            regMode: false,
+            logInError: false,
             logInErrorFill: false,
             regErrorPassword: false,
-            regErrorTaken: loginTakenError,
+            regErrorTaken: false,
             regErrorFill: false,
             regErrorLoginTooLong: false,
             regErrorPasswordTooLong: false,
@@ -21,7 +21,7 @@
         }
     },
     methods: {
-        tryLogIn() {
+        async tryLogIn() {
             vm.logInError = false
             vm.logInErrorFill = false
 
@@ -40,13 +40,28 @@
                 return
             }
 
-            $("#input-login-username").val(vm.login)
-            $("#input-login-password").val(vm.password)
-            $("#input-login-camefrom").val(cameFrom)
-            $("#input-login-filmid").val(passedFilmId)
-            $("#try-login-form").submit()
+            await $.ajax({
+                url: "TryLogIn",
+                method: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "userName": vm.login,
+                    "password": vm.password,
+                }),
+                success: function (response) {
+                    if (response == false) {
+                        vm.logInError = true
+                    }
+                    else {
+                        sessionStorage.setItem("tokenKey", response.access_token)
+                        sessionStorage.setItem("userName", response.username)
+                        $("#go-library-form").submit()
+                    }
+                },
+            })
         },
-        tryRegister() {
+        async tryRegister() {
             vm.logInError = false
             vm.logInErrorFill = false
 
@@ -106,11 +121,26 @@
                 }
             }
 
-            $("#input-register-username").val(vm.loginRegister)
-            $("#input-register-password").val(vm.password1)
-            $("#input-register-camefrom").val(cameFrom)
-            $("#input-register-filmid").val(passedFilmId)
-            $("#try-register-form").submit()
+            await $.ajax({
+                url: "TryRegister",
+                method: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "userName": vm.login,
+                    "password": vm.password,
+                }),
+                success: function (response) {
+                    if (response == false) {
+                        vm.regErrorPassword = true
+                    }
+                    else {
+                        sessionStorage.setItem("tokenKey", response.access_token)
+                        sessionStorage.setItem("userName", response.username)
+                        $("#go-library-form").submit()
+                    }
+                },
+            })
         },
         goBack() {
             vm.logInError = false
@@ -126,9 +156,7 @@
             vm.regErrorLoginSymbols = false
             vm.regErrorPasswordSymbols = false
 
-            $("#input-goback-camefrom").val(cameFrom)
-            $("#input-goback-filmid").val(passedFilmId)
-            $("#goback-form").submit()
+            $("#go-library-form").submit()
         },
     }
 }

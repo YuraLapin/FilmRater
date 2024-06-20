@@ -2,6 +2,10 @@
 using FilmRaterMain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace FilmRaterMain.Controllers
 {
@@ -24,76 +28,73 @@ namespace FilmRaterMain.Controllers
             return View();
         }
 
-        public IActionResult LogIn(string cameFrom, int filmId)
+        public IActionResult LogIn()
         {
-            return View(new LoginModel() { ErrorType = "NoError", CameFrom = cameFrom, FilmId = filmId });
+            return View(new LoginModel() { ErrorType = "NoError" });
         }
 
-        [HttpPost("Home/Library")]
-        public IActionResult Library(string? userName)
+        [HttpPost("Home/TryLogin")]
+        public async Task<IResult> TryLogIn([FromBody] UserNameAndPassword userNameAndPassword)
         {
-            if (userName == null)
+            if (await databaseRequestService.UserNameIsFree(userNameAndPassword.UserName))
             {
-                return View(new LibraryModel() { UserName = "" });
+                return Results.Ok(false);
             }
 
-            return View(new LibraryModel() { UserName = userName });
-        }
+            string storedHash = await databaseRequestService.GetStoredHash(userNameAndPassword.UserName);
 
-        [HttpPost("Home/MoreInfo")]
-        public IActionResult MoreInfo(string? userName, int filmId)
-        {
-            if (userName == null)
-            {
-                return View(new MoreInfoModel() { UserName = "", FilmId = filmId });
-            }
-
-            return View(new MoreInfoModel() { UserName = userName, FilmId = filmId });
-        }
-
-        [HttpPost("Home/TryLogIn")]
-        public async Task<IActionResult> TryLogIn(string userName, string password, string cameFrom, int filmId)
-        {
-            if (await databaseRequestService.UserNameIsFree(userName))
-            {
-                return View("LogIn", new LoginModel() { ErrorType = "WrongCridentialsError", CameFrom = cameFrom, FilmId = filmId });
-            }
-
-            string storedHash = await databaseRequestService.GetStoredHash(userName);
-
-            bool success = passwordHashService.CheckHash(storedHash, password);
+            bool success = passwordHashService.CheckHash(storedHash, userNameAndPassword.Password);
 
             if (success)
             {
+                var claims = new List<Claim> { new Claim(ClaimTypes.Name, userNameAndPassword.UserName) };
 
-                if (cameFrom == "Library")
+                var jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
+                    claims: claims,
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+                var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+                var response = new
                 {
-                    return View("Library", new LibraryModel() { UserName = userName });
-                }
+                    access_token = encodedJwt,
+                    username = userNameAndPassword.UserName,
+                };
 
-                if (cameFrom == "MoreInfo" && filmId != 0)
-                {
-                    return View("MoreInfo", new MoreInfoModel() { UserName = userName, FilmId = filmId });
-                }
-
+                return Results.Json(response);
             }
 
-            return View("LogIn", new LoginModel() { ErrorType = "WrongCridentialsError", CameFrom = cameFrom, FilmId = filmId });
+            return Results.Ok(false);
         }
 
-        [HttpPost("Home/GoBack")]
-        public async Task<IActionResult> GoBack(string cameFrom, int filmId)
+        [HttpGet("Home/CheckToken")]
+        public IResult CheckToken()
         {
-            if (cameFrom == "MoreInfo" && filmId != 0)
+            if (User.Identity.IsAuthenticated)
             {
-                return View("MoreInfo", new MoreInfoModel() { UserName = "", FilmId = filmId });
+                return Results.Ok(true);
             }
 
-            return View("Library", new LibraryModel() { UserName = "" });
+            return Results.Ok(false);
+        }
+
+        [HttpPost("Home/Library")]
+        public IActionResult Library()
+        {
+            return View();
+        }
+
+        [HttpPost("Home/MoreInfo")]
+        public IActionResult MoreInfo(int id)
+        {
+            return View(new MoreInfoModel() { FilmId = id });
         }
 
         [HttpPost("Home/TryRegister")]
-        public async Task<IActionResult> TryRegister(string userName, string password, string cameFrom, int filmId)
+        public async Task<IResult> TryRegister(string userName, string password)
         {
             string hashedPassword = passwordHashService.HashPassword(password);
 
@@ -101,18 +102,27 @@ namespace FilmRaterMain.Controllers
 
             if (success)
             {
-                if (cameFrom == "Library")
-                {
-                    return View("Library", new LibraryModel() { UserName = userName });
-                }
+                var claims = new List<Claim> { new Claim(ClaimTypes.Name, userName) };
 
-                if (cameFrom == "MoreInfo" && filmId != 0)
+                var jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
+                    claims: claims,
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+                var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+                var response = new
                 {
-                    return View("MoreInfo", new MoreInfoModel() { UserName = userName, FilmId = filmId });
-                }
+                    access_token = encodedJwt,
+                    username = userName,
+                };
+
+                return Results.Json(response);
             }
 
-            return View("LogIn", new LoginModel() { ErrorType = "LoginTakenError", CameFrom = cameFrom, FilmId = filmId });
+            return Results.Unauthorized();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

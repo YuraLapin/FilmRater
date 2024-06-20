@@ -1,7 +1,8 @@
 const Library = {
     data() {
         return {
-            userName: passedUserName,
+            loggedIn: false,
+            userName: "",
             library: [],
             genreFilter: [],
             minScore: "",
@@ -21,17 +22,17 @@ const Library = {
     methods: {
         logOut() {
             vm.userName = ""
+            vm.loggedIn = false
+            sessionStorage.removeItem("tokenKey")
+            sessionStorage.removeItem("userName")
             vm.updateLibrary(vm.currentPage)
         },
         goLogin() {
-            $("#input-login-camefrom").val("Library")
-            $("#input-login-filmid").val(0)
-            $("#throw-to-login-form").submit()
+            $("#go-to-login-form").submit()
         },
-        goToMoreFilmInfo(filmId) {
-            $("#hidden-form-input-user-name").val(vm.userName)
+        goMoreInfo(filmId) {
             $("#hidden-form-input-film-id").val(filmId)
-            $("#throw-to-more-info").submit()
+            $("#go-to-more-info").submit()
         },
         async updateLibrary(page) {
             if (vm.minScore == "") {
@@ -151,6 +152,23 @@ var vm = app.mount('#library')
 
 window.onload = async function () {
     ++vm.loading
+
+    const token = sessionStorage.getItem("tokenKey")
+    await $.ajax({
+        url: "CheckToken",
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Authorization": "Bearer " + token,
+        },
+        success: function (response) {
+            if (response == true) {
+                vm.userName = sessionStorage.getItem("userName")
+                vm.loggedIn = true
+            }
+        },
+    })
+
     await $.ajax({
         url: "api/requests/GetMinMaxYears",
         method: "GET",
@@ -163,6 +181,7 @@ window.onload = async function () {
             vm.maxYearDefault = result.maxYear
         }
     })
+
     await $.ajax({
         url: "api/requests/GetGenres",
         method: "GET",
@@ -172,7 +191,9 @@ window.onload = async function () {
             vm.genres = result
         }
     })
+
     await vm.updateLibrary(1)
     await vm.getTotalPages()
+
     --vm.loading
 }

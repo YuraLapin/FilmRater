@@ -1,7 +1,8 @@
 ﻿const FilmInfo = {
     data() {
         return {
-            userName: passedUserName,
+            loggedIn: false,
+            userName: "",
             filmId: passedFilmId,
             filmData: "",
             comments: [],
@@ -99,9 +100,27 @@ const app = Vue.createApp(FilmInfo)
 
 var vm = app.mount('#film-info')
 
-window.onload = function () {
+window.onload = async function () {
     ++vm.loading
+
+    const token = sessionStorage.getItem("tokenKey")
+    await $.ajax({
+        url: "CheckToken",
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Authorization": "Bearer " + token,
+        },
+        success: function (response) {
+            if (response == true) {
+                vm.userName = sessionStorage.getItem("userName")
+                vm.loggedIn = true
+            }
+        },
+    })
+
     vm.getFullFilmData()
     vm.getComments()
+
     --vm.loading
 }
