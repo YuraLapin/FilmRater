@@ -68,15 +68,15 @@
                 data: JSON.stringify({
                     "filmId": vm.filmId,
                     "userName": vm.userName,
-                    "text": newComment,
+                    "text": vm.newComment,
                 }),
                 success: function (result) {
                     vm.comments.unshift({
                         "userName": vm.userName,
-                        "text": newComment,
+                        "text": vm.newComment,
                         "userScore": vm.filmData.currentUserRating
                     })
-                    newComment = ""
+                    vm.newComment = ""
                 },
             })
         },

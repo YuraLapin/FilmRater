@@ -10,8 +10,8 @@ namespace FilmRaterMain.Controllers.UtilityClasses
         public DbConfiguration()
         {
             server = "localhost";
-            uid = "root";
-            pwd = "adminpassword192837";
+            uid = "client";
+            pwd = "clientpassword192837";
             database = "film_db";
         }
 
