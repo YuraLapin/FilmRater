@@ -360,7 +360,14 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                         filmData.Name = reader.GetString(1);
                         filmData.Year = reader.GetInt32(2);
                         filmData.Duration = reader.GetInt32(3);
-                        filmData.Slogan = reader.GetString(4);
+                        try
+                        {
+                            filmData.Slogan = reader.GetString(4);
+                        }
+                        catch (SqlNullValueException)
+                        {
+                            filmData.Slogan = "-";
+                        }
                         filmData.Synopsis = reader.GetString(5);
                         filmData.Directors = reader.GetString(6).Split(", ").ToList();
                         filmData.Countries = reader.GetString(7).Split(", ").ToList();
@@ -396,6 +403,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
                         }
                     }
                 }
+
                 else
                 {
                     filmData.CurrentUserRating = 0;

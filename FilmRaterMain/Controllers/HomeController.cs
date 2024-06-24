@@ -94,15 +94,15 @@ namespace FilmRaterMain.Controllers
         }
 
         [HttpPost("Home/TryRegister")]
-        public async Task<IResult> TryRegister(string userName, string password)
+        public async Task<IResult> TryRegister([FromBody] UserNameAndPassword userNameAndPassword)
         {
-            string hashedPassword = passwordHashService.HashPassword(password);
+            string hashedPassword = passwordHashService.HashPassword(userNameAndPassword.Password);
 
-            bool success = await databaseRequestService.TryRegister(userName, hashedPassword);
+            bool success = await databaseRequestService.TryRegister(userNameAndPassword.UserName, hashedPassword);
 
             if (success)
             {
-                var claims = new List<Claim> { new Claim(ClaimTypes.Name, userName) };
+                var claims = new List<Claim> { new Claim(ClaimTypes.Name, userNameAndPassword.UserName) };
 
                 var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.ISSUER,
@@ -116,7 +116,7 @@ namespace FilmRaterMain.Controllers
                 var response = new
                 {
                     access_token = encodedJwt,
-                    username = userName,
+                    username = userNameAndPassword.UserName,
                 };
 
                 return Results.Json(response);

@@ -45,6 +45,7 @@ textarea {
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;
     background-color: rgb(35, 35, 35);
+    border: 0;
 }
 
     input[type="text"]:focus,
@@ -161,7 +162,7 @@ input[type=number] {
 
 
 .user-info-container {
-    width: 300px;
+    width: 400px;
     position: fixed;
     top: 20px;
     right: 20px;
@@ -356,4 +357,61 @@ input[type=number] {
 
 .comment {
     margin: 10px;
+}
+
+
+
+.opacity-animation-enter-active {
+    animation: opacity-in 0.25s ease;
+}
+
+.opacity-animation-leave-active {
+    animation: opacity-in 0.125s reverse ease;
+}
+
+@keyframes opacity-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+
+
+.log-in-register-form div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.textbox {
+    width: 300px;
+    height: 40px;
+    font-size: 20px;
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
+.button {
+    width: 175px;
+    height: 40px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.switch-button {
+    margin-bottom: 5px;
+}
+
+.error-message {
+    text-align: center;
+    word-wrap: break-word;
+    background-color: rgba(216, 66, 66, 0.7);
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
 }

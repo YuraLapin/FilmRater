@@ -44,6 +44,7 @@ input[type="password"] {
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;
     background-color: rgb(35, 35, 35);
+    border: 0;
 }
 
 input[type="text"]:focus,
@@ -172,8 +173,16 @@ input[type=number] {
 .library-entry {
     text-align: center;
     margin: 3%;
-    background-color: rgb(35, 35, 35);
+    background-color: rgb(15, 15, 15);
 }
+
+    .library-entry:hover {
+        background-color: rgb(35, 35, 35);
+        -webkit-transition: background-color, 0.2s, ease;
+        -moz-transition: background-color, 0.2s, ease;
+        -o-transition: background-color, 0.2s, ease;
+        transition: background-color, 0.2s, ease;
+    }
 
 .film-cover {
     margin: 8px;
@@ -267,10 +276,6 @@ input[type=number] {
     margin-bottom: 10px;
 }
 
-    .film-name:hover {
-        cursor: pointer;
-    }
-
 .selected-star {
     color: orange;
 }
@@ -349,7 +354,7 @@ input[type=number] {
 }
 
 .user-info-container {
-    width: 300px;
+    width: 400px;
     position: fixed;
     top: 20px;
     right: 20px;
@@ -508,4 +513,41 @@ input[type="checkbox"] {
     100% {
         opacity: 100%;
     }
+}
+
+
+
+.log-in-register-form div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.textbox {
+    width: 300px;
+    height: 40px;
+    font-size: 20px;
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
+.button {
+    width: 175px;
+    height: 40px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.switch-button {
+    margin-bottom: 5px;
+}
+
+.error-message {
+    text-align: center;
+    word-wrap: break-word;
+    background-color: rgba(216, 66, 66, 0.7);
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
 }
