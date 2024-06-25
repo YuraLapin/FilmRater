@@ -1,0 +1,19 @@
+﻿body div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.header404 {
+    margin-top: 200px;
+    font-size: 100px;
+    font-weight: 500;
+}
+
+.header {
+    font-size: 35px;
+}
+
+.plaint-text {
+    font-size: 20px;
+}

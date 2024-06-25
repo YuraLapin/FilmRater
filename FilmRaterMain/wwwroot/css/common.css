@@ -1,0 +1,83 @@
+﻿:root {
+    --text-main-color: rgb(210, 210, 210);
+    --text-secondary-color: rgb(190, 190, 190);
+    --divider-color: rgb(150, 150, 150);
+    --background-color: rgb(15, 15, 15);
+    --element-color: rgb(35, 35, 35);
+    --element-hover-color: rgb(45, 45, 45);
+    --element-disabled-color: rgb(25, 25, 25);
+    --accent-color: rgb(255, 47, 47);
+    --link-color: rgb(88, 106, 255);
+    
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+    font-weight: 300;
+    color: var(--text-main-color);
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    scrollbar-color: rgb(100, 100, 100) rgb(45, 45, 45);
+    scrollbar-width: thin;
+}
+
+body {
+    background-color: var(--background-color);
+}
+
+a {
+    color: var(--link-color);
+}
+
+button {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    background-color: var(--element-color);
+    border: 0;
+}
+
+    button:hover {
+        cursor: pointer;
+        background-color: var(--element-hover-color);
+    }
+
+    button:disabled {
+        background-color: var(--element-disabled-color);
+    }
+
+        button:disabled:hover {
+            background-color: var(--element-disabled-color);
+            cursor: auto;
+        }
+
+input[type="text"],
+input[type="number"],
+input[type="password"] {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    background-color: var(--element-color);
+    border: 0;
+}
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="password"]:focus {
+        background-color: var(--element-hover-color);
+        outline: none;
+    }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}

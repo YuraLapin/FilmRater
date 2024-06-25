@@ -1,79 +1,11 @@
-﻿* {
-    box-sizing: border-box;
-    font-family: Noto Sans, sans-serif;
-    color: rgb(210, 210, 210);
-    font-size: 16px;
-    margin: 0;
-    padding: 0;
-    scrollbar-color: rgb(107, 107, 107) rgb(45, 45, 45);
-    scrollbar-width: thin;
-}
-
-body {
-    background-color: rgb(15, 15, 15);
-}
-
-button {
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-    background-color: rgb(35, 35, 35);
-    border: 0;
-}
-
-    button:hover {
-        cursor: pointer;
-        background-color: rgb(45, 45, 45);
-    }
-
-    button:disabled {
-        background-color: rgb(25, 25, 25);
-    }
-
-        button:disabled:hover {
-            background-color: rgb(25, 25, 25);
-            cursor: auto;
-        }
-
-input[type="text"],
-input[type="number"],
-input[type="password"] {
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-    background-color: rgb(35, 35, 35);
-    border: 0;
-}
-
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="password"]:focus {
-    background-color: rgb(45, 45, 45);
-    outline: none;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type=number] {
-    -moz-appearance: textfield;
-}
-
-
-
-
-.outer-container {
+﻿.outer-container {
     display: grid;
     width: 100%;
 }
 
 .nav-bar {
     width: 100%;
+    min-width: 1050px;
     height: 100px;
     display: flex;
     backdrop-filter: blur(10px);
@@ -93,27 +25,22 @@ input[type=number] {
 .nav-bar-header {
     margin-left: 15px;
     font-size: 40px;
+    font-weight: 400;
 }
 
 .search-bar-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 100%;
 }
 
 .search-input {
     margin-left: 20px;
-    width: 700px;
+    width: 600px;
     height: 50px;
     padding-left: 5px;
     padding-right: 5px;
     border: none;
-}
-
-.search-input:focus{
-    background-color: rgb(45, 45, 45);
-    outline: none;
 }
 
 .search-button {
@@ -123,17 +50,14 @@ input[type=number] {
 }
 
 .nav-bar-user-container {
-    margin-left: 10px;
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    position: relative;
+    width: 100%;
 }
 
 .user-button {
-    border: none;
+    position: absolute;
+    top: 25px;
+    right: 25px;
     width: 50px;
     height: 50px;
 }
@@ -144,12 +68,10 @@ input[type=number] {
     display: flex;
 }
 
-
-
 .library-container {
     width: 100%;
     display: block;
-    background-color: rgb(15, 15, 15);
+    background-color: var(--background-color);
 }
 
 .library-counter-container {
@@ -161,6 +83,7 @@ input[type=number] {
 
 .library-counter {
     font-size: 35px;
+    font-weight: 400;
 }
 
 .films-container {
@@ -173,11 +96,11 @@ input[type=number] {
 .library-entry {
     text-align: center;
     margin: 3%;
-    background-color: rgb(15, 15, 15);
+    background-color: var(--background-color);
 }
 
     .library-entry:hover {
-        background-color: rgb(35, 35, 35);
+        background-color: var(--element-color);
         -webkit-transition: background-color, 0.2s, ease;
         -moz-transition: background-color, 0.2s, ease;
         -o-transition: background-color, 0.2s, ease;
@@ -185,30 +108,7 @@ input[type=number] {
     }
 
 .film-cover {
-    margin: 8px;
-}
-
-@keyframes image_blur {
-    0% {
-        -webkit-filter: blur(0px);
-        filter: blur(0px);
-    }
-    100% {
-        -webkit-filter: blur(4px);
-        filter: blur(4px);
-    }
-}
-
-@keyframes image_blur_out {
-    0% {
-        -webkit-filter: blur(4px);
-        filter: blur(4px);
-    }
-
-    100% {
-        -webkit-filter: blur(0px);
-        filter: blur(0px);
-    }
+    margin: 10px;
 }
 
 .image-with-button {
@@ -217,12 +117,13 @@ input[type=number] {
     height: 320px;
 }
 
-    .image-with-button:hover img {
-        animation: image_blur 0.25s linear forwards;
+    .image-with-button img {
+        filter: blur(0px);
     }
 
-    .image-with-button:not(:hover) img {
-        animation: image_blur_out 0.25s linear forwards;
+    .image-with-button:hover img {
+        filter: blur(4px);
+        transition: filter 0.25s ease;
     }
 
     .image-with-button:hover div {
@@ -252,7 +153,6 @@ input[type=number] {
 }
 
 .image-button {
-    background-color:rgb(35, 35, 35);
     border: none;
     width: 150px;
     height: 30px;
@@ -263,7 +163,7 @@ input[type=number] {
 }
 
 .film-info {
-    color: rgb(180, 180, 180);
+    color: var(--text-secondary-color);
 }
 
 .user-rating-section {
@@ -274,6 +174,7 @@ input[type=number] {
 .film-name {
     margin-top: 10px;
     margin-bottom: 10px;
+    font-weight: 400;
 }
 
 .selected-star {
@@ -297,18 +198,18 @@ input[type=number] {
     width: 120px;
     height: 40px;
     display: grid;
-    color: rgb(210, 210, 210);
+    color: var(--text-main-color);
 }
 
     .loader:before,
     .loader:after {
         content: "";
         grid-area: 1/1;
-        --c: #0000 calc(100%/3), rgb(210, 210, 210) 0 calc(2*100%/3),#0000 0;
-        --c1: linear-gradient(90deg,var(--c));
-        --c2: linear-gradient( 0deg,var(--c));
-        background: var(--c1),var(--c2),var(--c1),var(--c2);
-        background-size: 300% 4px,4px 300%;
+        --c: #0000 calc(100% / 3), var(--text-main-color) 0 calc(2 * 100% / 3), #0000 0;
+        --c1: linear-gradient(90deg, var(--c));
+        --c2: linear-gradient(0deg, var(--c));
+        background: var(--c1), var(--c2), var(--c1), var(--c2);
+        background-size: 300% 4px, 4px 300%;
         background-repeat: no-repeat;
         animation: l15 1.5s infinite;
     }
@@ -319,37 +220,37 @@ input[type=number] {
 
 @keyframes l15 {
     0% {
-        background-position: 50% 0,100% 100%,0 100%,0 0
+        background-position: 50% 0, 100% 100%, 0 100%, 0 0
     }
 
     25% {
-        background-position: 0 0,100% 50%,0 100%,0 0
+        background-position: 0 0, 100% 50%, 0 100%, 0 0
     }
 
     50% {
-        background-position: 0 0,100% 0,50% 100%,0 0
+        background-position: 0 0, 100% 0, 50% 100%, 0 0
     }
 
     75% {
-        background-position: 0 0,100% 0,100% 100%,0 50%
+        background-position: 0 0, 100% 0, 100% 100%, 0 50%
     }
 
     75.01% {
-        background-position: 100% 0,100% 0,100% 100%,0 50%
+        background-position: 100% 0, 100% 0, 100% 100%, 0 50%
     }
 
     100% {
-        background-position: 50% 0,100% 0,100% 100%,0 100%
+        background-position: 50% 0, 100% 0, 100% 100%, 0 100%
     }
 }
 
 @keyframes l2-2 {
-    0%,49.9% {
-        background-position: 0 0,100% 0,100% 100%,0 100%
+    0%, 49.9% {
+        background-position: 0 0, 100% 0, 100% 100%, 0 100%
     }
 
-    50%,100% {
-        background-position: 100% 0,100% 100%,0 100%,0 0
+    50%, 100% {
+        background-position: 100% 0, 100% 100%, 0 100%, 0 0
     }
 }
 
@@ -482,14 +383,14 @@ input[type="checkbox"] {
 .checkmark {
     height: 20px;
     width: 20px;
-    background-color: rgb(35, 35, 35);
+    background-color: var(--element-color);
     border-radius: 5px;
     border: 0;
     transition: all 0.2s ease;
 }
 
     .checkmark:hover {
-        background-color: rgb(45, 45, 45);
+        background-color: var(--element-hover-color);
     }
 
 .genre-entry input:checked ~ .checkmark {

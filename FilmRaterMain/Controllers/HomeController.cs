@@ -27,9 +27,24 @@ namespace FilmRaterMain.Controllers
             return View();
         }
 
-        public IActionResult LogIn()
+        public async Task<IActionResult> Library(int id)
         {
-            return View(new LoginModel() { ErrorType = "NoError" });
+            if (id == 0)
+            {
+                return View();
+            }
+
+            if (await databaseRequestService.FilmExist(id))
+            {
+                return View("MoreInfo", new MoreInfoModel() { FilmId = id });
+            }
+
+            return View("PageNotFound");
+        }
+
+        public IActionResult PageNotFound()
+        {
+            return View();
         }
 
         [HttpPost("Home/TryLogin")]
@@ -69,27 +84,6 @@ namespace FilmRaterMain.Controllers
             return Results.Ok(false);
         }
 
-        [HttpGet("Home/CheckToken")]
-        public IResult CheckToken()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                return Results.Ok(true);
-            }
-
-            return Results.Ok(false);
-        }
-
-        public IActionResult Library(int id)
-        {
-            if (id == 0)
-            {
-                return View();
-            }
-
-            return View("MoreInfo", new MoreInfoModel() { FilmId = id });
-        }
-
         [HttpPost("Home/TryRegister")]
         public async Task<IResult> TryRegister([FromBody] UserNameAndPassword userNameAndPassword)
         {
@@ -120,6 +114,17 @@ namespace FilmRaterMain.Controllers
             }
 
             return Results.Unauthorized();
+        }
+
+        [HttpGet("Home/CheckToken")]
+        public IResult CheckToken()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Results.Ok(true);
+            }
+
+            return Results.Ok(false);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlTypes;
 using System.Text;
+using System.Xml.Linq;
 
 namespace FilmRaterMain.Controllers.UtilityClasses
 {
@@ -467,6 +468,35 @@ namespace FilmRaterMain.Controllers.UtilityClasses
             }
 
             return true;
+        }
+
+        public async Task<bool> FilmExist(int id)
+        {
+            int count = 0;
+
+            using (var conn = new MySql.Data.MySqlClient.MySqlConnection(config.GetConnectionString()))
+            {
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandText = "SELECT film.film_id FROM film WHERE film.film_id = @film_id;";
+                cmd.Parameters.AddWithValue("@film_id", id);
+
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        ++count;
+                    }
+                }
+            }
+
+            if (count > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

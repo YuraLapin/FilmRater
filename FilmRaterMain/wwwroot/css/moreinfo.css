@@ -1,74 +1,4 @@
-﻿* {
-    box-sizing: border-box;
-    font-family: Noto Sans, sans-serif;
-    color: rgb(210, 210, 210);
-    font-size: 16px;
-    margin: 0;
-    padding: 0;
-    scrollbar-color: rgb(107, 107, 107) rgb(45, 45, 45);
-    scrollbar-width: thin;
-}
-
-body {
-    background-color: rgb(15, 15, 15);
-}
-
-button {
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-    background-color: rgb(35, 35, 35);
-    border: 0;
-}
-
-    button:hover {
-        cursor: pointer;
-        background-color: rgb(45, 45, 45);
-    }
-
-    button:disabled {
-        background-color: rgb(25, 25, 25);
-    }
-
-        button:disabled:hover {
-            background-color: rgb(25, 25, 25);
-            cursor: auto;
-        }
-
-input[type="text"],
-input[type="number"],
-input[type="password"],
-textarea {
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    transition: all 0.2s ease;
-    background-color: rgb(35, 35, 35);
-    border: 0;
-}
-
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    input[type="password"]:focus,
-    textarea:focus {
-        background-color: rgb(45, 45, 45);
-        outline: none;
-    }
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type=number] {
-    -moz-appearance: textfield;
-}
-
-
-
-.outer-container {
+﻿.outer-container {
     display: grid;
     width: 100%;
 }
@@ -77,6 +7,7 @@ input[type=number] {
     width: 100%;
     height: 100px;
     display: flex;
+    justify-content: center;
     backdrop-filter: blur(10px);
     position: sticky;
     top: 0;
@@ -85,42 +16,40 @@ input[type=number] {
 }
 
 .nav-bar-back-button-container {
-    width: 350px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    position: relative;
+    width: 10%;
 }
 
 .back-button {
     position: absolute;
     top: 25px;
+    right: 25px;
     width: 50px;
     height: 50px;
+    font-weight: 600;
 }
 
 .nav-bar-header-container {
-    width: 900px;
+    width: 1200px;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .nav-bar-header {
-    margin-left: 15px;
     font-size: 40px;
+    font-weight: 400;
 }
 
 .nav-bar-user-container {
-    margin-left: 10px;
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    position: relative;
+    width: 10%;
 }
 
 .user-button {
+    position: absolute;
+    top: 25px;
+    left: 25px;
     width: 50px;
     height: 50px;
 }
@@ -135,7 +64,7 @@ input[type=number] {
 .film-page-container {
     width: 1200px;
     display: grid;
-    background-color: rgb(35, 35, 35);
+    background-color: var(--element-color);
 }
 
 .film-cover-and-info {
@@ -207,7 +136,7 @@ input[type=number] {
 }
 
     .film-info-table tr {
-        border-bottom: solid 1px rgb(150, 150, 150);
+        border-bottom: solid 1px var(--divider-color);
         height: 14%;
     }
 
@@ -221,7 +150,7 @@ input[type=number] {
 
 .table-header {
     text-align: start;
-    color: rgb(190, 190, 190);
+    color: var(--text-secondary-color);
     margin: 5px;
 }
 
@@ -289,7 +218,7 @@ input[type=number] {
     height: 300px;
     width: 520px;
     display: block;
-    background-color: rgb(15, 15, 15, 0.3);
+    background-color: rgba(15, 15, 15, 0.3);
     backdrop-filter: blur(5px);
     border-radius: 10px;
 }
@@ -322,6 +251,7 @@ input[type=number] {
 
 .header {
     font-size: 20px;
+    font-weight: 400;
     margin-left: 20px;
     margin-top: 20px;
     margin-bottom: 10px;
@@ -337,7 +267,7 @@ input[type=number] {
     width: 550px;
     margin-bottom: 10px;
     display: block;
-    background-color: rgb(15, 15, 15, 0.3);
+    background-color: rgba(15, 15, 15, 0.3);
     backdrop-filter: blur(5px);
     border-radius: 10px;
 }
@@ -348,7 +278,7 @@ input[type=number] {
 }
 
 .my-comment-user-name {
-    color: rgb(255, 47, 47);
+    color: var(--accent-color);
 }
 
 .comment-rating-container {
