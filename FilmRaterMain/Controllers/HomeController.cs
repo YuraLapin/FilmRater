@@ -5,7 +5,6 @@ using System.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace FilmRaterMain.Controllers
 {
@@ -81,16 +80,14 @@ namespace FilmRaterMain.Controllers
             return Results.Ok(false);
         }
 
-        [HttpPost("Home/Library")]
-        public IActionResult Library()
+        public IActionResult Library(int id)
         {
-            return View();
-        }
+            if (id == 0)
+            {
+                return View();
+            }
 
-        [HttpPost("Home/MoreInfo")]
-        public IActionResult MoreInfo(int id)
-        {
-            return View(new MoreInfoModel() { FilmId = id });
+            return View("MoreInfo", new MoreInfoModel() { FilmId = id });
         }
 
         [HttpPost("Home/TryRegister")]

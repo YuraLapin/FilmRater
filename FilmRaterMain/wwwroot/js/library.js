@@ -46,8 +46,7 @@ const Library = {
             window.location.reload()
         },
         goMoreInfo(filmId) {
-            $("#hidden-form-input-film-id").val(filmId)
-            $("#go-to-more-info").submit()
+            window.location.href = `/Home/Library/${filmId}`
         },
         async updateLibrary(page) {
             if (vm.minScore == "") {
@@ -65,7 +64,7 @@ const Library = {
             vm.library = []
             ++vm.loading
             await $.ajax({
-                url: "api/requests/GetLibrary",
+                url: "/api/requests/GetLibrary",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -83,7 +82,7 @@ const Library = {
                     vm.library = result
                     vm.library.forEach((film) => {
                         film.visualRating = film.currentUserRating
-                        film.coverUrl = "../images/covers/" + film.id + "_full.webp"
+                        film.coverUrl = "/images/covers/" + film.id + "_full.webp"
                     })
                     vm.currentPage = page
                 }
@@ -93,7 +92,7 @@ const Library = {
         },
         async updateUserScore(filmId, userScore) {
             await $.ajax({
-                url: "api/requests/UpdateUserScore",
+                url: "/api/requests/UpdateUserScore",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -131,7 +130,7 @@ const Library = {
                 vm.maxYear = vm.maxYearDefault
             }
             await $.ajax({
-                url: "api/requests/GetTotalPages",
+                url: "/api/requests/GetTotalPages",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -178,7 +177,7 @@ const Library = {
             }
 
             await $.ajax({
-                url: "TryLogIn",
+                url: "/Home/TryLogIn",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -259,7 +258,7 @@ const Library = {
             }
 
             await $.ajax({
-                url: "TryRegister",
+                url: "/Home/TryRegister",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -289,7 +288,7 @@ var vm = app.mount('#library')
 window.onload = async function () {
     const token = sessionStorage.getItem("tokenKey")
     await $.ajax({
-        url: "CheckToken",
+        url: "/Home/CheckToken",
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -304,7 +303,7 @@ window.onload = async function () {
     })
 
     await $.ajax({
-        url: "api/requests/GetMinMaxYears",
+        url: "/api/requests/GetMinMaxYears",
         method: "GET",
         dataType: "json",
         contentType: "application/json",
@@ -317,7 +316,7 @@ window.onload = async function () {
     })
 
     await $.ajax({
-        url: "api/requests/GetGenres",
+        url: "/api/requests/GetGenres",
         method: "GET",
         dataType: "json",
         contentType: "application/json",

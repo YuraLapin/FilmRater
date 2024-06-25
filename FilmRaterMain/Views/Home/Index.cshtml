@@ -10,14 +10,9 @@
 
 <body>
 
-    <form method="post" id="throw-to-login-form" style="display:none" action="/Home/Library">
-        <input id="hidden-form-input" name="userName" />
-    </form>
-
     <script>
 
-        $("#hidden-form-input").val("")
-        $("#throw-to-login-form").submit()
+        window.location.href = "/Home/Library"
 
     </script>
 

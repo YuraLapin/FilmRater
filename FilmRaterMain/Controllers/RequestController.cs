@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FilmRaterMain.Controllers
 {
     [ApiController]
-    [Route("Home/api/requests")]
+    [Route("api/requests")]
     public class RequestController : ControllerBase
     {
         DatabaseRequestService databaseRequestService;

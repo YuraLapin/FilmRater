@@ -32,7 +32,7 @@
     methods: {
         async getFullFilmData() {
             await $.ajax({
-                url: "api/requests/GetFullFilmData",
+                url: "/api/requests/GetFullFilmData",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -42,14 +42,14 @@
                 }),
                 success: function (result) {
                     vm.filmData = result
-                    vm.filmData.coverUrl = "../images/covers/" + passedFilmId + "_full.webp"
+                    vm.filmData.coverUrl = "/images/covers/" + passedFilmId + "_full.webp"
                     vm.filmData.visualRating = vm.filmData.currentUserRating
                 }
             })
         },
         async getComments() {
             await $.ajax({
-                url: "api/requests/GetFilmComments",
+                url: "/api/requests/GetFilmComments",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -63,7 +63,7 @@
         },
         async updateUserScore(userScore) {
             await $.ajax({
-                url: "api/requests/UpdateUserScore",
+                url: "/api/requests/UpdateUserScore",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -79,7 +79,7 @@
         },
         async sendComment() {
             await $.ajax({
-                url: "api/requests/UploadComment",
+                url: "/api/requests/UploadComment",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -99,8 +99,7 @@
             })
         },
         async goToLibrary() {
-            $("#input-library-username").val(vm.userName)
-            $("#go-library-form").submit()
+            window.location.href = "/Home/Library"
         },
         logOut() {
             vm.userName = ""
@@ -108,11 +107,6 @@
             sessionStorage.removeItem("tokenKey")
             sessionStorage.removeItem("userName")
             window.location.reload()
-        },
-        async goLogin() {
-            $("#input-login-camefrom").val("MoreInfo")
-            $("#input-login-filmid").val(vm.filmId)
-            $("#go-login-form").submit()
         },
         async tryLogIn() {
             vm.logInError = false
@@ -134,7 +128,7 @@
             }
 
             await $.ajax({
-                url: "TryLogIn",
+                url: "/Home/TryLogIn",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -215,7 +209,7 @@
             }
 
             await $.ajax({
-                url: "TryRegister",
+                url: "/Home/TryRegister",
                 method: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -247,7 +241,7 @@ window.onload = async function () {
 
     const token = sessionStorage.getItem("tokenKey")
     await $.ajax({
-        url: "CheckToken",
+        url: "/Home/CheckToken",
         method: "GET",
         headers: {
             "Accept": "application/json",
