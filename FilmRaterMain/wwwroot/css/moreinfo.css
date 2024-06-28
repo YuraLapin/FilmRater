@@ -20,14 +20,14 @@
     width: 10%;
 }
 
-.back-button {
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    width: 50px;
-    height: 50px;
-    font-weight: 600;
-}
+    .nav-bar-back-button-container button {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        width: 50px;
+        height: 50px;
+        font-weight: 600;
+    }
 
 .nav-bar-header-container {
     width: 1200px;
@@ -36,23 +36,23 @@
     justify-content: center;
 }
 
-.nav-bar-header {
-    font-size: 40px;
-    font-weight: 400;
-}
+    .nav-bar-header-container p{
+        font-size: 40px;
+        font-weight: 400;
+    }
 
 .nav-bar-user-container {
     position: relative;
     width: 10%;
 }
 
-.user-button {
-    position: absolute;
-    top: 25px;
-    left: 25px;
-    width: 50px;
-    height: 50px;
-}
+    .nav-bar-user-container button {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        width: 50px;
+        height: 50px;
+    }
 
 
 
@@ -82,6 +82,8 @@
     display: grid;
     margin: 10px;
 }
+
+
 
 .user-score-container {
     margin: 5px;
@@ -148,20 +150,24 @@
     width: 300px;
 }
 
-.table-header {
-    text-align: start;
-    color: var(--text-secondary-color);
-    margin: 5px;
-}
+    .header-cell p{
+        text-align: start;
+        color: var(--text-secondary-color);
+        margin: 5px;
+    }
 
 .info-cell {
     width: 600px;
 }
 
-.table-info {
-    text-align: start;
-    margin: 5px;
-}
+    .info-cell span:not(:last-child):after {
+        content: ", ";
+    }
+
+    .info-cell p{
+        text-align: start;
+        margin: 5px;
+    }
 
 .rating {
     text-align: start;
@@ -179,9 +185,9 @@
     text-align: justify;
 }
 
-.synopsis {
-    font-size: 18px;
-}
+    .synopsis-container p {
+        font-size: 18px;
+    }
 
 
 
@@ -192,10 +198,11 @@
     font-size: 30px;
 }
 
-.rating-header {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
+    .film-rating-container p{
+        font-size: 20px;
+        margin-bottom: 10px;
+        font-weight: 400;
+    }
 
 .selected-star {
     color: orange;
@@ -223,20 +230,36 @@
     border-radius: 10px;
 }
 
-.new-comment-user-name {
-    width: 450px;
-    margin: 10px;
-}
+    .new-comment-container textarea {
+        padding: 5px;
+        width: 500px;
+        height: 200px;
+        border: 0;
+        margin-left: 10px;
+        margin-right: 10px;
+        resize: none;
+    }
 
-.new-comment-textarea {
-    padding: 5px;
-    width: 500px;
-    height: 200px;
-    border: 0;
-    margin-left: 10px;
-    margin-right: 10px;
-    resize: none;
-}
+    .new-comment-container button{
+        margin: 10px;
+        width: 100px;
+        height: 30px;
+    }
+
+    .new-comment-container p{
+        width: 450px;
+        margin: 10px;
+    }
+
+        .new-comment-container p span:first-child {
+            font-size: 20px;
+            font-weight: 300;
+        }
+
+        .new-comment-container p span:last-child {
+            font-size: 20px;
+            font-weight: 400;
+        }
 
 .center-vert {
     display: flex;
@@ -257,14 +280,10 @@
     margin-bottom: 10px;
 }
 
-.send-button {
-    margin: 10px;
-    width: 100px;
-    height: 30px;
-}
+
 
 .comment-container {
-    width: 550px;
+    width: 98.75%;
     margin-bottom: 10px;
     display: block;
     background-color: rgba(15, 15, 15, 0.3);
@@ -275,6 +294,7 @@
 .comment-user-name {
     margin: 10px;
     font-size: 20px;
+    font-weight: 400;
 }
 
 .my-comment-user-name {

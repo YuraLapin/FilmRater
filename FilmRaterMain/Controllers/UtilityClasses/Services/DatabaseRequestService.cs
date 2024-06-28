@@ -13,7 +13,7 @@ namespace FilmRaterMain.Controllers.UtilityClasses
             config = new DbConfiguration();
         }
 
-        public const int pageSize = 30;
+        public const int pageSize = 20;
 
         public async Task<string> GetStoredHash(string login)
         {

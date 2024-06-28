@@ -13,7 +13,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/moreinfo.css" asp-append-version="true" />
@@ -34,19 +34,19 @@
 
             <div class="nav-bar-back-button-container">
 
-                <button class="back-button" v-on:click="goToLibrary()">&lt</button>
+                <button v-on:click="goToLibrary()">&lt</button>
 
             </div>
 
             <div class="nav-bar-header-container">
 
-                <p class="nav-bar-header">Фильмотека / {{ filmData.name }}</p>
+                <p>Фильмотека / {{ filmData.name }}</p>
 
             </div>
 
             <div class="nav-bar-user-container">
 
-                <button class="user-button" v-on:click="showUserInfo = true"><i class="fas">&#xf406;</i></button>
+                <button v-on:click="showUserInfo = true"><i class="fas">&#xf406;</i></button>
 
             </div>
 
@@ -176,19 +176,19 @@
 
                             <tr>
                                 <td class="header-cell">
-                                    <p class="table-header">Год производства</p>
+                                    <p>Год производства</p>
                                 </td>
                                 <td class="info-cell">
-                                    <p class="table-info">{{ filmData.year }}</p>
+                                    <p>{{ filmData.year }}</p>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td class="header-cell">
-                                    <p class="table-header">Страна</p>
+                                    <p>Страна</p>
                                 </td>
                                 <td class="info-cell">
-                                    <p class="table-info">
+                                    <p>
                                         <span v-for="country in filmData.countries">{{ country }}&nbsp</span>
                                     </p>
                                 </td>
@@ -196,51 +196,51 @@
 
                             <tr>
                                 <td class="header-cell">
-                                    <p class="table-header">Жанр</p>
+                                    <p>Жанр</p>
                                 </td>
                                 <td class="info-cell">
-                                    <p class="table-info">
-                                        <span v-for="genre in filmData.genres">{{ genre }}&nbsp</span>
+                                    <p>
+                                        <span v-for="genre in filmData.genres">{{ genre }}</span>
                                     </p>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td class="header-cell">
-                                    <p class="table-header">Слоган</p>
+                                    <p>Слоган</p>
                                 </td>
                                 <td class="info-cell">
-                                    <p class="table-info">{{ filmData.slogan }}</p>
+                                    <p>{{ filmData.slogan }}</p>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td class="header-cell">
-                                    <p class="table-header">Режиссер</p>
+                                    <p>Режиссер</p>
                                 </td>
                                 <td class="info-cell">
-                                    <p class="table-info">
-                                        <span v-for="director in filmData.directors">{{ director }}&nbsp</span>
+                                    <p>
+                                        <span v-for="director in filmData.directors">{{ director }}</span>
                                     </p>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td class="header-cell">
-                                    <p class="table-header">Время</p>
+                                    <p>Время</p>
                                 </td>
                                 <td class="info-cell">
-                                    <p class="table-info">{{ filmData.duration }} мин.</p>
+                                    <p>{{ filmData.duration }} мин.</p>
                                 </td>
                             </tr>
 
                             <tr>
                                 <td class="header-cell">
-                                    <p class="table-header">Оценка зрителей</p>
+                                    <p>Оценка зрителей</p>
                                 </td>
                                 <td class="info-cell">
-                                    <p class="table-info" v-if="filmData.rating > 0">{{ filmData.rating }}</p>
-                                    <p class="table-info" v-if="filmData.rating < 1">Оценок нет</p>
+                                    <p v-if="filmData.rating > 0">{{ filmData.rating }}</p>
+                                    <p v-if="filmData.rating < 1">Оценок нет</p>
                                 </td>
                             </tr>
 
@@ -252,13 +252,13 @@
 
                 <div class="synopsis-container">
 
-                    <p class="synopsis">{{ filmData.synopsis }}</p>
+                    <p>{{ filmData.synopsis }}</p>
 
                 </div>
 
                 <div class="film-rating-container" v-if="userName != ''">
 
-                    <p class="rating-header"><b class="rating-header">Ваша оценка</b></p>
+                    <p>Ваша оценка</p>
 
                     <span class="fa fa-star" v-bind:class="{ 'selected-star': filmData.visualRating >= 1 }" v-on:mouseover="filmData.visualRating = 1" v-on:mouseleave="filmData.visualRating = filmData.currentUserRating" v-on:click="filmData.currentUserRating = 1; updateUserScore(1)"></span>
                     <span class="fa fa-star" v-bind:class="{ 'selected-star': filmData.visualRating >= 2 }" v-on:mouseover="filmData.visualRating = 2" v-on:mouseleave="filmData.visualRating = filmData.currentUserRating" v-on:click="filmData.currentUserRating = 2; updateUserScore(2)"></span>
@@ -276,24 +276,20 @@
 
                         <div class="new-comment-container" v-if="userName != ''">
 
-                            <p class="new-comment-user-name">
-                                <span>Вы авторизованы под именем &ensp;</span>
+                            <p>
+                                <span>Вы авторизованы под именем </span>
                                 <span class="my-comment-user-name">{{ userName }}</span>
                             </p>
 
-                            <textarea class="new-comment-textarea" v-model="newComment"></textarea>
+                            <textarea v-model="newComment" maxlength="510"></textarea>
 
-                            <button class="send-button" v-on:click="sendComment()">Отправить</button>
+                            <button v-on:click="sendComment()">Отправить</button>
 
                         </div>
 
                         <div class="new-comment-container" v-if="userName == ''">
 
-                            <div class="center-vert">
-
-                                <p class="new-comment-user-name">Войдите, чтобы оставить отзыв или оценку</p>
-
-                            </div>
+                            <p>Войдите, чтобы оставить отзыв или оценку</p>
 
                         </div>
 
@@ -303,7 +299,7 @@
 
                         <div class="comment-container" v-for="comment in comments">
 
-                            <p class="comment-user-name"><u v-bind:class="{ 'my-comment-user-name': comment.userName == userName }">{{ comment.userName }}</u></p>
+                            <p class="comment-user-name" v-bind:class="{ 'my-comment-user-name': comment.userName == userName }">{{ comment.userName }}</p>
                             
                             <div class="comment-rating-container" v-if="comment.userScore != 0">
                                 <span class="fa fa-star" v-bind:class="{ 'selected-star': comment.userScore >= 1 }"></span>
